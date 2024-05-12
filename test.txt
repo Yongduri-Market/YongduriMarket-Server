@@ -1,2 +1,1 @@
-test 문서
-..
+git commit test문서 입니다
