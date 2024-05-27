@@ -21,6 +21,7 @@ public class ReportResponseDto {
     private String reportAnswer;
     private ReportStatus reportStatus;
     private Long fileId;
+    private ReportCategory reportCategory;
     private LocalDateTime createdAt;
 
     public static ReportResponseDto GetReportDto(Report report) {
@@ -31,6 +32,7 @@ public class ReportResponseDto {
                 report.getReportAnswer(),
                 report.getReportStatus(),
                 report.getFileId(),
+                report.getReportCategory(),
                 report.getCreatedAt()
         );
     }

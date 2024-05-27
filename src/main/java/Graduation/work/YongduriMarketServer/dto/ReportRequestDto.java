@@ -1,5 +1,6 @@
 package Graduation.work.YongduriMarketServer.dto;
 
+import Graduation.work.YongduriMarketServer.domain.state.ReportCategory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,13 @@ public class ReportRequestDto {
     public class CreateDTO {
         private String reportContents;
         private Long fileId;
+        private Long reportCategory;
         @Override
         public String toString() {
             return "CreateDTO{" +
                     ", reportContents='" + reportContents + '\'' +
                     ", fileId='" + fileId + '\'' +
+                    ", reportCategory='" + reportCategory + '\'' +
                     '}';
         }
     }

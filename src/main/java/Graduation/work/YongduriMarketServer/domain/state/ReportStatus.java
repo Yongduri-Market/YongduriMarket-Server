@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ReportStatus {
 
-    접수완료(0), //접수 완료
+    대기중(0), //접수 완료
     답변완료(1); //답변 완료
 
 

@@ -25,16 +25,20 @@ public class Report {
     @ManyToOne
     private User user;
 
-    @Column
+    @Column(nullable = false)
     private String reportContents;
     @Column
     private String reportAnswer;
 
-    @Column
+
     private ReportStatus reportStatus;
 
-    @Column
+    @Column(nullable = false)
     private Long fileId;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private ReportCategory reportCategory;
 
     @CreationTimestamp
     @Column

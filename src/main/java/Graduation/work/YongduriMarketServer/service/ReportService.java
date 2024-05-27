@@ -44,7 +44,7 @@ public class ReportService {
                     .reportContents(request.getReportContents())
                     .fileId(request.getFileId())
                     .user(user)
-                    .reportStatus(ReportStatus.접수완료)
+                    .reportStatus(ReportStatus.대기중)
                     .build();
             reportRepository.save(report);
             return true;
