@@ -66,7 +66,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 회원가입, 로그인은 모두 승인
-                                .requestMatchers( "/main", "/login", "/join", "/nickcheck", "/mail", "/refresh", "/changepwd/mail", "/changepwd", "/token").permitAll()
+                                .requestMatchers( "/main", "/login", "/join", "/nickname/check", "/join/email","/password/email",
+                                        "/report","/refresh", "/changepwd/mail", "/changepwd", "/token").permitAll()
 
                                 .anyRequest().authenticated()
                 )
@@ -99,21 +100,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
-                /* swagger v2 */
-                "/v2/api-docs",
-                "/swagger-resources",
-                "/swagger-resources/**",
-                "/configuration/ui",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**",
-                /* swagger v3 */
-                "/v3/api-docs/**",
-                "/swagger-ui/**");
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

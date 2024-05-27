@@ -100,7 +100,7 @@ public class MainService {
     //회원가입 시 이메일 인증
     public String joinEmail(String email) throws MessagingException, UnsupportedEncodingException {
         if(email == null) throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
-        MimeMessage emailForm = createEmailForm(email + "@yiu.com", "용두리마켓 회원가입 인증번호");
+        MimeMessage emailForm = createEmailForm(email + "@yiu.ac.kr", "용두리마켓 회원가입 인증번호");
         javaMailSender.send(emailForm);
         return authNum;
     }
