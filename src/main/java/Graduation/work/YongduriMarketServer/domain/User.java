@@ -32,6 +32,15 @@ public class User {
     @Column(nullable = false,  length = 20)
     private String nickname;
 
+    @Column(nullable = false,  length = 20)
+    private Long phone;
+
+    @Column(nullable = false)
+    private Integer fileId;
+
+    @Column(nullable = false)
+    private LocalDate birthDate;
+
     //연, 월, 일 정보만 표현
 
     @Column(columnDefinition = "TEXT")

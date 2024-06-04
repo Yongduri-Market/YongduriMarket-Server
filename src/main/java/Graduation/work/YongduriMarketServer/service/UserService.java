@@ -29,7 +29,6 @@ public class UserService {
         try{
             UserResponseDto userResponseDto = UserResponseDto.builder()
                     .studentId(user.getStudentId())
-                    .name(user.getName())
                     .nickname(user.getNickname())
                     .build();
 
@@ -55,6 +54,7 @@ public class UserService {
         try{
             Optional<User> infoUpdate = userRepository.findById(request.getStudentId());
             infoUpdate.get().setNickname(request.getNickname());
+            infoUpdate.get().setFileId(request.getFileId());
             userRepository.save(user);
             return true;
         }catch (Exception e){
