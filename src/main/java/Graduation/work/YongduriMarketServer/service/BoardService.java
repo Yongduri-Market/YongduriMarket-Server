@@ -7,7 +7,6 @@ import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseSavedIdDto;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
-import com.google.api.gax.rpc.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
