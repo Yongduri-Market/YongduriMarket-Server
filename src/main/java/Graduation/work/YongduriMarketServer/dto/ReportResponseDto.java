@@ -20,7 +20,6 @@ public class ReportResponseDto {
     private String reportContents;
     private String reportAnswer;
     private ReportStatus reportStatus;
-    private Long fileId;
     private ReportCategory reportCategory;
     private LocalDateTime createdAt;
 
@@ -31,7 +30,6 @@ public class ReportResponseDto {
                 report.getReportContents(),
                 report.getReportAnswer(),
                 report.getReportStatus(),
-                report.getFileId(),
                 report.getReportCategory(),
                 report.getCreatedAt()
         );

@@ -39,6 +39,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.hibernate.orm:hibernate-core:6.4.4.Final'
+	implementation 'net.bytebuddy:byte-buddy:1.14.0'
+	implementation 'net.bytebuddy:byte-buddy-agent:1.14.0'
 
 	//mysql
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -57,8 +60,7 @@ dependencies {
 	// template
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	// firebase
-	implementation 'com.google.firebase:firebase-admin:9.2.0'
+
 
 	// lombok
 	testImplementation 'org.projectlombok:lombok:1.18.26'
@@ -71,6 +73,3 @@ dependencies {
 
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}

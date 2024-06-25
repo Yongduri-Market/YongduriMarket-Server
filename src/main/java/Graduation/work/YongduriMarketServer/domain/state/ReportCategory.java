@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public enum ReportCategory {
 
-    유저신고(0), //신청
-    앱버그신고(1), //진행
-    기타(2);//완료
+    유저신고(0),
+    앱버그신고(1),
+    기타(2);
 
 
 

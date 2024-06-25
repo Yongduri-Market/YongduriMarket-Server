@@ -29,7 +29,10 @@ public class UserService {
         try{
             UserResponseDto userResponseDto = UserResponseDto.builder()
                     .studentId(user.getStudentId())
+                    .name(user.getName())
+                    .birthDate(user.getBirthDate())
                     .nickname(user.getNickname())
+                    .phone(user.getPhone())
                     .build();
 
             return userResponseDto;
@@ -52,10 +55,11 @@ public class UserService {
         }
 
         try{
-            Optional<User> infoUpdate = userRepository.findById(request.getStudentId());
-            infoUpdate.get().setNickname(request.getNickname());
-            infoUpdate.get().setFileId(request.getFileId());
-            userRepository.save(user);
+            user.setName(request.getName());
+            user.setNickname(request.getNickname());
+            user.setPhone(request.getPhone());
+            user.setBirthDate(request.getBirthDate());
+
             return true;
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);

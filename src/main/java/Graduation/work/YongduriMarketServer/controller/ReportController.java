@@ -15,28 +15,33 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/report")
+
 public class ReportController {
     private final ReportService reportService;
 
-    // report 조회
-    @GetMapping
-    public ResponseEntity<List> getList() throws Exception {
-        return new ResponseEntity<List>(reportService.getList(), HttpStatus.OK);
+    // report 사용자 조회
+    @GetMapping(value = "/report")
+    public ResponseEntity<List> getList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
+        return new ResponseEntity<List>(reportService.getList(user.getStudentId()), HttpStatus.OK);
+    }
+    // report 관리자 조회
+    @GetMapping("value = /admin/report")
+    public ResponseEntity<List> getAdminList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
+        return new ResponseEntity<List>(reportService.getAdminList(user.getStudentId()), HttpStatus.OK);
     }
     // report 등록
-    @PostMapping
+    @PostMapping("/report")
     public ResponseEntity<Boolean> create(@AuthenticationPrincipal CustomUserDetails user, ReportRequestDto.CreateDTO request ) throws Exception {
         System.out.println("report_create request: " + request);
         return new ResponseEntity<Boolean>(reportService.create( user.getStudentId(),request), HttpStatus.OK);
     }
-    // report 답변
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/answer")
-    public ResponseEntity<Boolean> answer(@AuthenticationPrincipal CustomUserDetails user, Long reportId, ReportRequestDto.AnswerDTO request) throws Exception {
+    // report 관리자 답변
+    @PostMapping("/admin/repot/answer")
+    public ResponseEntity<Boolean> answer(@AuthenticationPrincipal CustomUserDetails user, ReportRequestDto.AnswerDTO request) throws Exception {
         System.out.println("report_answer request: " + request);
-        return new ResponseEntity<Boolean>(reportService.answer(user.getStudentId(),reportId ,request), HttpStatus.OK);
+        return new ResponseEntity<Boolean>(reportService.answer(user.getStudentId() ,request), HttpStatus.OK);
     }
+
 
 
 

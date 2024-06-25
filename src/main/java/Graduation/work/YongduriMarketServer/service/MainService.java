@@ -34,6 +34,7 @@ public class MainService {
     private String authNum;
     private long exp_refreshToken = Duration.ofDays(14).toMillis();
 
+    //회원가입
     public Boolean join(JoinDto request) throws Exception {
         //400 - 데이터 미입력
         if(request.getStudentId() == null || request.getPassword() == null || request.getName() == null ||request.getNickname() ==null){
@@ -61,7 +62,7 @@ public class MainService {
         return true;
         }
 
-
+    //로그인
     public LoginResponseDto login(LoginRequestDto request) throws Exception {
 
         // 400 - 데이터 미입력
@@ -157,7 +158,7 @@ public class MainService {
         authNum = key.toString();
     }
     //비밀번호 변경
-    public Boolean pwdChange(PwdChangeRequestDto request)  throws MessagingException, UnsupportedEncodingException{
+    public Boolean pwdChange(PwdChangeRequestDto request)  throws Exception{
         // 400 - 데이터 없음
         if(request.getStudentId() == null || request.getPassword() == null)
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);

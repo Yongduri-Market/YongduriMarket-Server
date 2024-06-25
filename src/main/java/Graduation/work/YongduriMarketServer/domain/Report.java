@@ -21,7 +21,7 @@ public class Report {
     @Column
     private Long reportId;
 
-    @JoinColumn(name = "studentId",nullable = false)
+    @JoinColumn(name = "student_Id",nullable = false)
     @ManyToOne
     private User user;
 

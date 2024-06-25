@@ -10,7 +10,10 @@ import lombok.*;
 public class UserResponseDto {
 
     private Long studentId;
+    private String name;
+    private String birthDate;
     private String nickname;
-    private Integer fileId;
+    private Long phone;
+    //private Integer fileId;
 
 }

@@ -9,7 +9,6 @@ import Graduation.work.YongduriMarketServer.repository.ReportRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
-import com.google.firebase.database.core.Repo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,27 +21,34 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
+    // 신고하기 사용자 조회
+    public List<ReportResponseDto> getList(Long studentId) throws Exception{
 
-    public List<ReportResponseDto> getList() throws Exception{
+        User user = findByStudentId(studentId);
+        List<Report> report = reportRepository.findByUserOrderByCreatedAtDesc(user);
+        List<ReportResponseDto> getListDto = new ArrayList<>();
+        report.forEach(s -> getListDto.add(ReportResponseDto.GetReportDto(s)));
+        return getListDto;
+    }
+    //신고하기 관리자 조회
+    public List getAdminList(Long studentId) {
         List<Report> report = reportRepository.findByOrderByCreatedAtDesc();
         List<ReportResponseDto> getListDto = new ArrayList<>();
         report.forEach(s -> getListDto.add(ReportResponseDto.GetReportDto(s)));
         return getListDto;
     }
-
+    //신고하기 글 작성
     public Boolean create(Long studentId, ReportRequestDto.CreateDTO request) throws Exception{
         User user = findByStudentId(studentId);
 
         // 400 -데이터 미입력
-        if(request.getReportContents().isEmpty() ||request.getFileId() ==null){
+        if(request.getReportContents().isEmpty()){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         try{
 
             Report report = Report.builder()
-
                     .reportContents(request.getReportContents())
-                    .fileId(request.getFileId())
                     .user(user)
                     .reportStatus(ReportStatus.대기중)
                     .build();
@@ -57,25 +63,21 @@ public class ReportService {
 
     }
 
-    public Boolean answer(Long studentId,Long reportId,   ReportRequestDto.AnswerDTO request) throws Exception{
+    //신고하기 관리자 답변
+    public Boolean answer(Long studentId, ReportRequestDto.AnswerDTO request) throws Exception{
         User user = findByStudentId(studentId);
-
-        Report report = findByReportId(reportId);
         // 400 -데이터 미입력
         if(request.getReportId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+        Report report = findByReportId(request.getReportId());
         try{
-
             report.setReportAnswer(request.getReportAnswer());
             report.setReportStatus(ReportStatus.답변완료);
             return true;
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
-
-
     }
 
     public  Report findByReportId(Long reportId) {
@@ -87,4 +89,7 @@ public class ReportService {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
+
+
+
 }

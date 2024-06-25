@@ -9,13 +9,11 @@ public class ReportRequestDto {
     @Setter
     public class CreateDTO {
         private String reportContents;
-        private Long fileId;
         private Long reportCategory;
         @Override
         public String toString() {
             return "CreateDTO{" +
                     ", reportContents='" + reportContents + '\'' +
-                    ", fileId='" + fileId + '\'' +
                     ", reportCategory='" + reportCategory + '\'' +
                     '}';
         }
@@ -30,6 +28,17 @@ public class ReportRequestDto {
             return "AnswerDTO{" +
                     ", reportId='" + reportId + '\'' +
                     ", reportAnswer='" + reportAnswer + '\'' +
+                    '}';
+        }
+    }
+    @Getter
+    @Setter
+    public class DeleteDTO {
+        private Long reportId;
+        @Override
+        public String toString() {
+            return "DeleteDTO{" +
+                    ", reportId='" + reportId + '\'' +
                     '}';
         }
     }

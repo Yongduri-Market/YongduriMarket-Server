@@ -35,11 +35,11 @@ public class User {
     @Column(nullable = false,  length = 20)
     private Long phone;
 
-    @Column(nullable = false)
-    private Integer fileId;
+   // @Column(nullable = false)
+    //private Integer fileId;
 
     @Column(nullable = false)
-    private LocalDate birthDate;
+    private String birthDate;
 
     //연, 월, 일 정보만 표현
 
@@ -61,7 +61,6 @@ public class User {
         this.password = password;
         this.name = name;
         this.nickname = nickname;
-
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

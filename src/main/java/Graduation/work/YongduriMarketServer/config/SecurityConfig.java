@@ -4,7 +4,7 @@ package Graduation.work.YongduriMarketServer.config;
 
 import Graduation.work.YongduriMarketServer.security.TokenAuthenticationFilter;
 import Graduation.work.YongduriMarketServer.security.TokenProvider;
-import com.google.firebase.database.annotations.NotNull;
+import com.sun.istack.NotNull;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 // 회원가입, 로그인은 모두 승인
                                 .requestMatchers( "/main", "/login", "/join", "/nickname/check", "/join/email","/password/email",
                                         "/report","/refresh", "/changepwd/mail", "/changepwd", "/token").permitAll()
-
+                                .requestMatchers("/admin/repot/", "admin/repot/answer").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 // JWT 인증 필터 적용
