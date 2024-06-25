@@ -23,7 +23,6 @@ public class ReportService {
     private final UserRepository userRepository;
     // 신고하기 사용자 조회
     public List<ReportResponseDto> getList(Long studentId) throws Exception{
-
         User user = findByStudentId(studentId);
         List<Report> report = reportRepository.findByUserOrderByCreatedAtDesc(user);
         List<ReportResponseDto> getListDto = new ArrayList<>();
