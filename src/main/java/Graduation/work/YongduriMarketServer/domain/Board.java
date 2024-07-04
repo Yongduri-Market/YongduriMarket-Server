@@ -69,7 +69,7 @@ public class Board {
         this.updatedAt = updatedAt;
     }
 
-    // board 값만 수정해 주고 boardRepository를 이용해서 저장하는 로직 -> JPA의 Dirty Checking(변경 감지) 때문
+// board 값만 수정해 주고 boardRepository를 이용해서 저장하는 로직 -> JPA의 Dirty Checking(변경 감지) 때문
     public void update(BoardRequestDto requestDto) {
         this.tradePlace = requestDto.getTradePlace();
         this.tradeMethod = requestDto.getTradeMethod();

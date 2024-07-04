@@ -2,16 +2,15 @@ package Graduation.work.YongduriMarketServer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
-@Getter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class BoardRequestDto {
+public class BoardResponseDto {
     private long boardId;
     private long userId;
     private long tradePlace;
@@ -24,15 +23,4 @@ public class BoardRequestDto {
     private long price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @Getter
-    public static class LikeDto{
-        private long userId;
-        private long boardId;
-
-        public LikeDto(long userId,long boardId){
-            this.userId = userId;
-            this.boardId = boardId;
-        }
-    }
 }
