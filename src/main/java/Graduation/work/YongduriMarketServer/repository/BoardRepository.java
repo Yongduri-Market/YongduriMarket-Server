@@ -3,6 +3,8 @@ package Graduation.work.YongduriMarketServer.repository;
 import Graduation.work.YongduriMarketServer.domain.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
     /*@Override
     public void updateCount(Board board1, boolean b) {
@@ -18,4 +20,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
                     .execute();
         }
     }*/
+    Optional<Board> findByBoardId(Long boardId);
 }

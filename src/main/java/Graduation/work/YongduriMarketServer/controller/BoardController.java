@@ -1,14 +1,16 @@
 package Graduation.work.YongduriMarketServer.controller;
 
+import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
 import Graduation.work.YongduriMarketServer.domain.Board;
+import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.dto.BoardRequestDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
-import Graduation.work.YongduriMarketServer.dto.BoardResponseSavedIdDto;
 import Graduation.work.YongduriMarketServer.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,41 +26,33 @@ public class BoardController {
 
     private final BoardService boardService;
 
-
-    @GetMapping //게시글 전체 조회
+    //게시글 전체 조회
+    @GetMapping
     public ResponseEntity<List> boardList(){
         return new ResponseEntity<List>(boardService.boardList(), HttpStatus.OK);
     }
-
-    @GetMapping("/detail/{boardId}") //게시글 상세 조회
-    public ResponseEntity<BoardResponseDto> boardDetail(@PathVariable("boardId") Long boardId) {
-        BoardResponseDto boardResponseDto = boardService.boardDetail(boardId);
-        return ResponseEntity.ok(boardResponseDto);
+    //게시글 상세 조회
+    @GetMapping("/detail")
+    public ResponseEntity<BoardResponseDto> boardDetail(BoardRequestDto.DetailDto request)  throws Exception{
+        return new ResponseEntity<BoardResponseDto>(boardService.boardDetail(request), HttpStatus.OK);
     }
-
     //게시글 등록
     @PostMapping("/write")
-    public ResponseEntity<BoardResponseSavedIdDto> boardWrite(@RequestBody BoardRequestDto requestDto){
-        BoardResponseSavedIdDto boardResponseSavedIdDto = boardService.boardWrite(requestDto);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{savedId}")
-                .buildAndExpand(boardResponseSavedIdDto.getSavedId())
-                .toUri();
-        return ResponseEntity.created(location).body(boardResponseSavedIdDto);
-    }
-
-    // 게시글 수정
-    @PutMapping
-    public ResponseEntity<?> boardEdit(@PathVariable("boardId") long boardId, @RequestBody BoardRequestDto boardRequestDto) {
-        boardService.boardEdit(boardId, boardRequestDto);
+    public ResponseEntity<?> boardWrite(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.BoardWriteDto request) throws Exception {
+        boardService.boardWrite(user.getStudentId(), request);
         return ResponseEntity.ok().build();
     }
-
+    // 게시글 수정
+    @PutMapping("/edit")
+    public ResponseEntity<?> boardEdit(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.BoardEditDto request) throws Exception{
+        boardService.boardEdit(user.getStudentId(), request);
+        return ResponseEntity.ok().build();
+    }
+    //게시글 삭제
     @DeleteMapping
-    public ResponseEntity<?> boardDelete(@PathVariable long boardId){
-        boardService.boardDelete(boardId);
-        return new ResponseEntity<>("board delete complete", HttpStatus.OK);
+    public ResponseEntity<?> boardDelete(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.boardIdDto request)throws Exception{
+        boardService.boardDelete(user.getStudentId(), request);
+        return ResponseEntity.ok().build();
     }
 
     /*
@@ -74,12 +68,7 @@ public class BoardController {
         boardService.likeDelete(likeDto);
         return new ResponseEntity<>("like delete complete", HttpStatus.OK);
     }
-*/
-    //게시글 작성
-    //게시글 삭제
-    //게시글 수정
-    //게시글 좋아요
-    //게시글 좋아요 취소
+    */
 
 
 }

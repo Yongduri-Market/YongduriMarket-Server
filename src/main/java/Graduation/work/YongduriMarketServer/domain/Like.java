@@ -1,26 +1,23 @@
 package Graduation.work.YongduriMarketServer.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
-    //유저랑 연결 하고
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "studentId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,5 +27,4 @@ public class Like {
     @CreationTimestamp
     @Column
     private LocalDateTime createdAt;
-
 }

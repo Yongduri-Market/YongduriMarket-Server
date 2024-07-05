@@ -38,7 +38,6 @@ public class Review {
     @Column
     private Integer assessment;
 
-
     // 별점 1~5
     @Column
     private Integer scope;

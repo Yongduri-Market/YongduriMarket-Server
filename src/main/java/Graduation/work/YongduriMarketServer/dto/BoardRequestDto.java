@@ -1,9 +1,7 @@
 package Graduation.work.YongduriMarketServer.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,27 +10,54 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class BoardRequestDto {
-    private long boardId;
-    private long userId;
-    private long tradePlace;
-    private long tradeMethod;
-    private long tradeStatus;
-    private long salesCategory;
-    private String boardTitle;
-    private String boardContent;
-    private long hits;
-    private long price;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     @Getter
     public static class LikeDto{
-        private long userId;
+        private long studentId;
         private long boardId;
 
-        public LikeDto(long userId,long boardId){
-            this.userId = userId;
+        public LikeDto(long studentId,long boardId){
+            this.studentId = studentId;
             this.boardId = boardId;
         }
     }
+    @Data
+    public static class boardIdDto{
+        private long boardId;
+    }
+
+    @Data
+    public static class DetailDto {
+        private Long boardId;
+    }
+    @Data
+    public static class BoardWriteDto{
+        private long boardId;
+        private long studentId;
+        private long tradePlace;
+        private long tradeMethod;
+        private TradeStatus status = TradeStatus.ACTIVE;
+        private long salesCategory;
+        private String boardTitle;
+        private String boardContent;
+        private long hits = 1;
+        private long price;
+        private LocalDateTime createdAt;
+    }
+    @Data
+    public static class BoardEditDto{
+        private long boardId;
+        private long studentId;
+        private long tradePlace;
+        private long tradeMethod;
+        private TradeStatus status = TradeStatus.ACTIVE;
+        private long salesCategory;
+        private String boardTitle;
+        private String boardContent;
+        private long hits = 1;
+        private long price;
+        private LocalDateTime updatedAt;
+    }
+
+
 }
