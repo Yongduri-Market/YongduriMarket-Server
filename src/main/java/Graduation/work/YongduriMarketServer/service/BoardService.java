@@ -117,9 +117,9 @@ public class BoardService {
     //게시글 삭제
     @Transactional
     public void boardDelete(long studentId, BoardRequestDto.boardIdDto requestDto) throws Exception{
-       User user = findByStudentId(studentId);
-       Board board = findByBoardId(requestDto.getBoardId());
-       Optional<Board> opBoard = boardRepository.findById(requestDto.getBoardId());
+        User user = findByStudentId(studentId);
+        Board board = findByBoardId(requestDto.getBoardId());
+        Optional<Board> opBoard = boardRepository.findById(requestDto.getBoardId());
 
         // 404
         if(opBoard.isEmpty()) throw new CustomException(ErrorCode.NOT_EXIST_ID);
