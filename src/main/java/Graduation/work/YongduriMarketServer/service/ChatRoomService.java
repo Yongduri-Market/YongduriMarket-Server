@@ -134,8 +134,8 @@ public class ChatRoomService {
                 .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_ID));
     }
 
-    private Board findByBoardId(Long BoardId) {
-        return boardRepository.findByBoardId(BoardId)
+    private Board findByBoardId(Long boardId) {
+        return boardRepository.findByBoardId(boardId)
                 .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_ID));
     }
 

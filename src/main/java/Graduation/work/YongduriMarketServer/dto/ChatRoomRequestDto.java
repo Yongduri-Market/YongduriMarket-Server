@@ -12,7 +12,7 @@ public class ChatRoomRequestDto {
     @Getter
     @Setter
     public class CreateDto {
-        private Long BoardId;
+        private Long boardId;
         private String buyer;
 
     }
