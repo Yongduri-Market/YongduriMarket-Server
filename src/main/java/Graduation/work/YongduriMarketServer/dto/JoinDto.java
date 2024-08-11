@@ -14,6 +14,8 @@ public class JoinDto {
     private String  password;
     private String  name;
     private String  nickname;
+    private Long phone;
+    private Long birthDate;
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
 

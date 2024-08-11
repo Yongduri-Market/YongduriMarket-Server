@@ -39,7 +39,7 @@ public class User {
     //private Integer fileId;
 
     @Column(nullable = false)
-    private String birthDate;
+    private Long birthDate;
 
     //연, 월, 일 정보만 표현
 

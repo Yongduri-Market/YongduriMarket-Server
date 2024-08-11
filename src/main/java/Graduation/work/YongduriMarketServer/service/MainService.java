@@ -37,7 +37,8 @@ public class MainService {
     //회원가입
     public Boolean join(JoinDto request) throws Exception {
         //400 - 데이터 미입력
-        if(request.getStudentId() == null || request.getPassword() == null || request.getName() == null ||request.getNickname() ==null){
+        if(request.getStudentId() == null || request.getPassword() == null || request.getName() == null ||request.getNickname() ==null
+        || request.getBirthDate() ==null || request.getPhone() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         //409 - 데이터 중복
@@ -54,6 +55,8 @@ public class MainService {
                     .password(passwordEncoder.encode(request.getPassword()))
                     .name(request.getName())
                     .nickname(request.getNickname())
+                    .phone(request.getPhone())
+                    .birthDate(request.getBirthDate())
                     .build();
             userRepository.save(user);
         } catch (Exception e) {
@@ -101,7 +104,7 @@ public class MainService {
     //회원가입 시 이메일 인증
     public String joinEmail(String email) throws MessagingException, UnsupportedEncodingException {
         if(email == null) throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
-        MimeMessage emailForm = createEmailForm(email + "@naver.com", "용두리마켓 회원가입 인증번호");
+        MimeMessage emailForm = createEmailForm(email + "@yiu.ac.kr", "용두리마켓 회원가입 인증번호");
         javaMailSender.send(emailForm);
         return authNum;
     }
