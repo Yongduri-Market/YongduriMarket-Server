@@ -16,8 +16,8 @@ public class ChatRoomResponseDto {
 
     private Long roomId;
     private Long boardId;
-    private String seller;
-    private String buyer;
+    private Long seller;
+    private Long buyer;
     private Integer tradeStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -27,8 +27,8 @@ public class ChatRoomResponseDto {
         return new ChatRoomResponseDto(
                 chatRoom.getRoomId(),
                 chatRoom.getBoard().getBoardId(),
-                chatRoom.getSeller().getNickname(),
-                chatRoom.getBuyer().getNickname(),
+                chatRoom.getSeller().getStudentId(),
+                chatRoom.getBuyer().getStudentId(),
                 chatRoom.getTradeStatus(),
                 chatRoom.getCreatedAt(),
                 chatRoom.getUpdatedAt()

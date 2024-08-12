@@ -41,8 +41,6 @@ public class ChatRoomController {
         return new ResponseEntity<Boolean>(chatRoomService.delete(user.getStudentId(),request), HttpStatus.OK);
     }
 
-
-
     //거래 종료
     @PutMapping("/end")
     public ResponseEntity<Boolean> endTrade(@AuthenticationPrincipal CustomUserDetails user, ChatRoomRequestDto.EndTradeDto request) throws Exception{

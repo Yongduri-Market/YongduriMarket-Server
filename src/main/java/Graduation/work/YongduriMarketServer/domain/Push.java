@@ -1,6 +1,6 @@
 package Graduation.work.YongduriMarketServer.domain;
 
-import Graduation.work.YongduriMarketServer.domain.state.PushCategory;
+import Graduation.work.YongduriMarketServer.domain.state.PushType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,7 +23,7 @@ public class Push {
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    private PushCategory pushCategory;
+    private PushType pushCategory;
 
     @Column
     private String pushContents;

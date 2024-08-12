@@ -13,7 +13,7 @@ public class ChatRoomRequestDto {
     @Setter
     public class CreateDto {
         private Long boardId;
-        private String buyer;
+        private Long buyer;
 
     }
 
@@ -27,17 +27,20 @@ public class ChatRoomRequestDto {
     @Setter
     public class EndTradeDto {
         private Long roomId;
+        private Long boardId;
     }
     @Getter
     @Setter
     public class DeleteDto {
         private Long roomId;
+
     }
 
     @Getter
     @Setter
     public class reserveTradeDto {
         private Long roomId;
+        private Long boardId;
 
     }
 }

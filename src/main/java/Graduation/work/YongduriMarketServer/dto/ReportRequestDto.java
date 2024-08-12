@@ -1,15 +1,24 @@
 package Graduation.work.YongduriMarketServer.dto;
-import Graduation.work.YongduriMarketServer.domain.state.ReportCategory;
+import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import lombok.Getter;
 import lombok.Setter;
 public class ReportRequestDto {
+
+
+
     @Getter
     @Setter
-    public class CreateDTO {
+    public class UserReportDto {
         private String reportContents;
-        private Long reportCategory;
-
+        private Long toUserId;
+        private Long roomId;
     }
+    @Getter
+    @Setter
+    public class BugReportDto {
+        private String reportContents;
+    }
+
     @Getter
     @Setter
     public class AnswerDTO {
@@ -18,11 +27,5 @@ public class ReportRequestDto {
 
     }
 
-    @Getter
-    @Setter
-    public class DeleteDTO {
-        private Long reportId;
-
-    }
 
 }

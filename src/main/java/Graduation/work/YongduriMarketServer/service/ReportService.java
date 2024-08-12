@@ -1,9 +1,12 @@
 package Graduation.work.YongduriMarketServer.service;
+import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Report;
 import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
+import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.dto.ReportRequestDto;
 import Graduation.work.YongduriMarketServer.dto.ReportResponseDto;
+import Graduation.work.YongduriMarketServer.repository.ChatRoomRepository;
 import Graduation.work.YongduriMarketServer.repository.ReportRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
@@ -19,11 +22,13 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
+
     // 신고하기 사용자 조회
     public List<ReportResponseDto> getList(Long studentId) throws Exception{
 
         User user = findByStudentId(studentId);
-        List<Report> report = reportRepository.findByUserOrderByCreatedAtDesc(user);
+        List<Report> report = reportRepository.findByOrderByCreatedAtDesc();
         List<ReportResponseDto> getListDto = new ArrayList<>();
         report.forEach(s -> getListDto.add(ReportResponseDto.GetReportDto(s)));
         return getListDto;
@@ -35,19 +40,27 @@ public class ReportService {
         report.forEach(s -> getListDto.add(ReportResponseDto.GetReportDto(s)));
         return getListDto;
     }
-    //신고하기 글 작성
-    public Boolean create(Long studentId, ReportRequestDto.CreateDTO request) throws Exception{
+
+
+
+    // 유저 신고
+    public Boolean reportUser(Long studentId, ReportRequestDto.UserReportDto request) {
         User user = findByStudentId(studentId);
+        User toUserId = findByStudentId(request.getToUserId());
+        ChatRoom chatRoom = findByRoomId(request.getRoomId());
 
         // 400 -데이터 미입력
-        if(request.getReportContents().isEmpty()){
+        if(request.getReportContents().isEmpty() || request.getToUserId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         try{
 
             Report report = Report.builder()
                     .reportContents(request.getReportContents())
-                    .user(user)
+                    .userId(user)
+                    .toUserId(toUserId)
+                    .reportType(ReportType.유저신고)
+                    .reportTypeId(request.getRoomId())
                     .reportStatus(ReportStatus.대기중)
                     .build();
             reportRepository.save(report);
@@ -57,6 +70,32 @@ public class ReportService {
         }
 
     }
+    // 앱 버그 신고
+    public Boolean reportAppBug(Long studentId, ReportRequestDto.BugReportDto request) {
+        User user = findByStudentId(studentId);
+        // 400 -데이터 미입력
+        if(request.getReportContents().isEmpty()  ){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        try{
+
+            Report report = Report.builder()
+                    .reportContents(request.getReportContents())
+                    .reportType(ReportType.앱버그신고)
+                    .reportStatus(ReportStatus.대기중)
+                    .build();
+            reportRepository.save(report);
+            return true;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
+
+
 
     //신고하기 관리자 답변
     public Boolean answer(Long studentId, ReportRequestDto.AnswerDTO request) throws Exception{
@@ -83,7 +122,10 @@ public class ReportService {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
-
+    public ChatRoom findByRoomId(Long roomId) {
+        return chatRoomRepository.findByRoomId(roomId)
+                .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_ID));
+    }
 
 
 }

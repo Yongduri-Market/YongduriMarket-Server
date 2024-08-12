@@ -1,5 +1,5 @@
 package Graduation.work.YongduriMarketServer.domain;
-import Graduation.work.YongduriMarketServer.domain.state.ReportCategory;
+import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,20 +16,38 @@ public class Report {
     @Column
     private Long reportId;
 
-    @JoinColumn(name = "student_Id",nullable = false)
+    //신고 하는사람
+    @JoinColumn
     @ManyToOne
-    private User user;
+    private User userId;
 
-    @Column(nullable = false)
+    //신고 당하는 사람
+    @JoinColumn
+    @ManyToOne
+    private User toUserId;
+
+    @Column(columnDefinition = "TEXT")
     private String reportContents;
+
     @Column
     private String reportAnswer;
-    private ReportStatus reportStatus;
-    @Column(nullable = false)
-    private Long fileId;
+
+    //0 대기중, 1 답변 완료
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
-    private ReportCategory reportCategory;
+    private ReportStatus reportStatus;
+
+
+    //0 유저 신고 , 1 앱버그 신고
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private ReportType reportType;
+
+    @Column
+    private Long reportTypeId;
+
+
+
     @CreationTimestamp
     @Column
     private LocalDateTime createdAt;

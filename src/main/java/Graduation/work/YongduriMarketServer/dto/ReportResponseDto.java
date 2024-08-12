@@ -1,7 +1,6 @@
 package Graduation.work.YongduriMarketServer.dto;
 import Graduation.work.YongduriMarketServer.domain.Report;
-import Graduation.work.YongduriMarketServer.domain.User;
-import Graduation.work.YongduriMarketServer.domain.state.ReportCategory;
+import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -12,21 +11,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReportResponseDto {
     private Long reportId;
-    private Long studentId;
+    private Long userId;
+    private Long toUserId;
     private String reportContents;
     private String reportAnswer;
     private ReportStatus reportStatus;
-    private ReportCategory reportCategory;
+    private ReportType reportType;
+    private Long reportTypeId;
     private LocalDateTime createdAt;
 
     public static ReportResponseDto GetReportDto(Report report) {
         return new ReportResponseDto(
                 report.getReportId(),
-                report.getUser().getStudentId(),
+                report.getUserId().getStudentId(),
+                report.getToUserId().getStudentId(),
                 report.getReportContents(),
                 report.getReportAnswer(),
                 report.getReportStatus(),
-                report.getReportCategory(),
+                report.getReportType(),
+                report.getReportTypeId(),
                 report.getCreatedAt()
         );
     }

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 
 @Getter
-public enum PushCategory {
+public enum PushType {
 
     후기작성(0);
 
@@ -13,7 +13,7 @@ public enum PushCategory {
 
     private final int value;
 
-    PushCategory(int value) {
+    PushType(int value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public enum PushCategory {
         return value;
     }
 
-    public static PushCategory fromInt(int value) {
-        for (PushCategory pushCategory : PushCategory.values()) {
+    public static PushType fromInt(int value) {
+        for (PushType pushCategory : PushType.values()) {
             if (pushCategory.getValue() == value) {
                 return pushCategory;
             }
