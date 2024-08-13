@@ -46,7 +46,8 @@ public class Report {
     @Column
     private Long reportTypeId;
 
-
+    @Column
+    private Integer userReportReason;
 
     @CreationTimestamp
     @Column

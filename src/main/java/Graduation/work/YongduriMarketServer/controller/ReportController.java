@@ -1,6 +1,7 @@
 package Graduation.work.YongduriMarketServer.controller;
 import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
 import Graduation.work.YongduriMarketServer.dto.ReportRequestDto;
+import Graduation.work.YongduriMarketServer.dto.ReportResponseDto;
 import Graduation.work.YongduriMarketServer.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,29 +19,28 @@ public class ReportController {
 
     // report 사용자 전체 조회
     @GetMapping(value = "/report")
-    public ResponseEntity<List> getList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
-        return new ResponseEntity<List>(reportService.getList(user.getStudentId()), HttpStatus.OK);
+    public ResponseEntity<List> getList() throws Exception {
+        return new ResponseEntity<List>(reportService.getList(), HttpStatus.OK);
     }
-    // report 사용자 전체 조회
-    /*
+    // report 사용자 상세 조회
     @GetMapping(value = "/report/detail")
-    public ResponseEntity<List> getList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
-        return new ResponseEntity<List>(reportService.getList(user.getStudentId()), HttpStatus.OK);
-    }*/
+    public ResponseEntity<ReportResponseDto> getUserDetail(ReportRequestDto.DetailDto request) throws Exception {
+        return new ResponseEntity<ReportResponseDto>(reportService.getUserDetail(request), HttpStatus.OK);
+    }
 
 
     // report 관리자 전체 조회
     @GetMapping(value =" /admin/report")
-    public ResponseEntity<List> getAdminList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
-        return new ResponseEntity<List>(reportService.getAdminList(user.getStudentId()), HttpStatus.OK);
+    public ResponseEntity<List> getAdminList() throws Exception {
+        return new ResponseEntity<List>(reportService.getAdminList(), HttpStatus.OK);
     }
-/*
-    // report 관리자 전체 조회
+
+    // report 관리자 상세 조회
     @GetMapping(value =" /admin/report/detail")
-    public ResponseEntity<List> getAdminList(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
-        return new ResponseEntity<List>(reportService.getAdminList(user.getStudentId()), HttpStatus.OK);
+    public ResponseEntity<ReportResponseDto> getAdminDetail(ReportRequestDto.DetailDto request) throws Exception {
+        return new ResponseEntity<ReportResponseDto>(reportService.getAdminDetail(request), HttpStatus.OK);
     }
-*/
+
 
 
     // report 유저 신고

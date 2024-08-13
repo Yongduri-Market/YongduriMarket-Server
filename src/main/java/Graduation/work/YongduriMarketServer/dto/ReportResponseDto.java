@@ -18,9 +18,10 @@ public class ReportResponseDto {
     private ReportStatus reportStatus;
     private ReportType reportType;
     private Long reportTypeId;
+    private Integer userReportReason;
     private LocalDateTime createdAt;
 
-    public static ReportResponseDto GetReportDto(Report report) {
+    public static ReportResponseDto getReportDto(Report report) {
         return new ReportResponseDto(
                 report.getReportId(),
                 report.getUserId().getStudentId(),
@@ -30,7 +31,10 @@ public class ReportResponseDto {
                 report.getReportStatus(),
                 report.getReportType(),
                 report.getReportTypeId(),
+                report.getUserReportReason(),
                 report.getCreatedAt()
         );
     }
+
+
 }
