@@ -19,8 +19,8 @@ public class ReportController {
 
     // report 사용자 전체 조회
     @GetMapping(value = "/report")
-    public ResponseEntity<List> getList() throws Exception {
-        return new ResponseEntity<List>(reportService.getList(), HttpStatus.OK);
+    public ResponseEntity<List> getAllReport() throws Exception {
+        return new ResponseEntity<List>(reportService.getAllReport(), HttpStatus.OK);
     }
     // report 사용자 상세 조회
     @GetMapping(value = "/report/detail")
@@ -31,8 +31,8 @@ public class ReportController {
 
     // report 관리자 전체 조회
     @GetMapping(value =" /admin/report")
-    public ResponseEntity<List> getAdminList() throws Exception {
-        return new ResponseEntity<List>(reportService.getAdminList(), HttpStatus.OK);
+    public ResponseEntity<List> getAdminReport() throws Exception {
+        return new ResponseEntity<List>(reportService.getAdminReport(), HttpStatus.OK);
     }
 
     // report 관리자 상세 조회
@@ -56,8 +56,8 @@ public class ReportController {
 
     // report 관리자 답변
     @PostMapping("/admin/report/answer")
-    public ResponseEntity<Boolean> answer(@AuthenticationPrincipal CustomUserDetails user, ReportRequestDto.AnswerDTO request) throws Exception {
-        return new ResponseEntity<Boolean>(reportService.answer(user.getStudentId() ,request), HttpStatus.OK);
+    public ResponseEntity<Boolean> answerAdmin(@AuthenticationPrincipal CustomUserDetails user, ReportRequestDto.AnswerDTO request) throws Exception {
+        return new ResponseEntity<Boolean>(reportService.answerAdmin(user.getStudentId() ,request), HttpStatus.OK);
     }
 
 

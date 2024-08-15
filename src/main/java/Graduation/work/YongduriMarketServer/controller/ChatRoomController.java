@@ -21,24 +21,24 @@ public class ChatRoomController {
 
     //전체조회
     @GetMapping
-    public ResponseEntity<List> getList() throws Exception{
-        return new ResponseEntity<List>(chatRoomService.getListAll(), HttpStatus.OK);
+    public ResponseEntity<List> getAllChatRoom() throws Exception{
+        return new ResponseEntity<List>(chatRoomService.getAllChatRoom(), HttpStatus.OK);
     }
 
     //상세조회
     @GetMapping("/detail")
-    public ResponseEntity<ChatRoomResponseDto> getDetail(ChatRoomRequestDto.DetailDto request) throws Exception{
-        return new ResponseEntity<ChatRoomResponseDto>(chatRoomService.getDetail(request), HttpStatus.OK);
+    public ResponseEntity<ChatRoomResponseDto> getChatRoomDetails(ChatRoomRequestDto.DetailDto request) throws Exception{
+        return new ResponseEntity<ChatRoomResponseDto>(chatRoomService.getChatRoomDetails(request), HttpStatus.OK);
     }
     //방 생성
     @PostMapping
-    public ResponseEntity<Boolean> create(@AuthenticationPrincipal CustomUserDetails user, ChatRoomRequestDto.CreateDto request) throws Exception{
-        return new ResponseEntity<Boolean>(chatRoomService.create(user.getStudentId(),request), HttpStatus.OK);
+    public ResponseEntity<Boolean> createChatRoom(@AuthenticationPrincipal CustomUserDetails user, ChatRoomRequestDto.CreateDto request) throws Exception{
+        return new ResponseEntity<Boolean>(chatRoomService.createChatRoom(user.getStudentId(),request), HttpStatus.OK);
     }
     // 방 삭제
     @DeleteMapping
-    public ResponseEntity<Boolean> delete(@AuthenticationPrincipal CustomUserDetails user,ChatRoomRequestDto.DeleteDto request) throws Exception{
-        return new ResponseEntity<Boolean>(chatRoomService.delete(user.getStudentId(),request), HttpStatus.OK);
+    public ResponseEntity<Boolean> deleteChatRoom(@AuthenticationPrincipal CustomUserDetails user,ChatRoomRequestDto.DeleteDto request) throws Exception{
+        return new ResponseEntity<Boolean>(chatRoomService.deleteChatRoom(user.getStudentId(),request), HttpStatus.OK);
     }
 
     //거래 종료

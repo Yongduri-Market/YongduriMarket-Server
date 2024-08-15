@@ -25,7 +25,7 @@ public class ReportService {
     private final ChatRoomRepository chatRoomRepository;
 
     // 신고하기 사용자 전체조회
-    public List<ReportResponseDto> getList() throws Exception{
+    public List<ReportResponseDto> getAllReport() throws Exception{
         List<Report> report = reportRepository.findByOrderByCreatedAtDesc();
         List<ReportResponseDto> getListDto = new ArrayList<>();
         report.forEach(s -> getListDto.add(ReportResponseDto.getReportDto(s)));
@@ -45,7 +45,7 @@ public class ReportService {
 
 
     //신고하기 관리자 전체조회
-    public List<ReportResponseDto> getAdminList() {
+    public List<ReportResponseDto> getAdminReport() {
         List<Report> report = reportRepository.findByOrderByCreatedAtDesc();
         List<ReportResponseDto> getListDto = new ArrayList<>();
         report.forEach(s -> getListDto.add(ReportResponseDto.getReportDto(s)));
@@ -119,7 +119,7 @@ public class ReportService {
 
 
     //신고하기 관리자 답변
-    public Boolean answer(Long studentId, ReportRequestDto.AnswerDTO request) throws Exception{
+    public Boolean answerAdmin(Long studentId, ReportRequestDto.AnswerDTO request) throws Exception{
         User user = findByStudentId(studentId);
         // 400 -데이터 미입력
         if(request.getReportId() == null){

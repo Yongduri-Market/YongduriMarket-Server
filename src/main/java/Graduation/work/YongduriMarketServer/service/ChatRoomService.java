@@ -28,7 +28,7 @@ public class ChatRoomService {
 
 
     //전체조회
-    public List<ChatRoomResponseDto> getListAll()throws Exception{
+    public List<ChatRoomResponseDto> getAllChatRoom()throws Exception{
         List<ChatRoom>  chatRoom = chatRoomRepository.findByOrderByCreatedAtDesc();
         List<ChatRoomResponseDto> getListDTO = new ArrayList<>();
         chatRoom.forEach(s-> getListDTO.add(ChatRoomResponseDto.getChatRoomDTO(s)));
@@ -36,7 +36,7 @@ public class ChatRoomService {
     }
 
     //상세조회
-    public ChatRoomResponseDto getDetail(ChatRoomRequestDto.DetailDto request) throws Exception {
+    public ChatRoomResponseDto getChatRoomDetails(ChatRoomRequestDto.DetailDto request) throws Exception {
         ChatRoom chatRoom = findByRoomId(request.getRoomId());
         try{
             return ChatRoomResponseDto.getChatRoomDTO(chatRoom);
@@ -50,7 +50,7 @@ public class ChatRoomService {
 
 
     //방 생성
-    public Boolean create(Long studentId, ChatRoomRequestDto.CreateDto request) {
+    public Boolean createChatRoom(Long studentId, ChatRoomRequestDto.CreateDto request) {
         User user = findByStudentId(studentId);
         Board board = findByBoardId(request.getBoardId());
         //400 데이터미입력
@@ -74,7 +74,7 @@ public class ChatRoomService {
 
 
     //방 삭제
-    public Boolean delete(Long studentId,ChatRoomRequestDto.DeleteDto request) {
+    public Boolean deleteChatRoom(Long studentId,ChatRoomRequestDto.DeleteDto request) {
         User user = findByStudentId(studentId);
         ChatRoom chatRoom = findByRoomId(request.getRoomId());
 
