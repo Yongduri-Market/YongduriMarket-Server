@@ -96,7 +96,7 @@ public class ChatRoomService {
     public Boolean endTrade(Long studentId,ChatRoomRequestDto.EndTradeDto request) {
         User user = findByStudentId(studentId);
         ChatRoom chatRoom = findByRoomId(request.getRoomId());
-        //400 데이터미입력
+        //400 데이터 미입력
         if(request.getRoomId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
