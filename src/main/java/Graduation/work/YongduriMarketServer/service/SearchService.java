@@ -29,10 +29,25 @@ public class SearchService {
     //전체조회
     public List <SearchResponseDto>getAllKeyword() throws Exception{
         List<Search> search = searchRepository.findByOrderByCreatedAtDesc();
-        List <SearchResponseDto> getListDTO = new ArrayList<>();
-        search.forEach(s->getListDTO.add(SearchResponseDto.getSearchDTO(s)));
-        return getListDTO;
+        List <SearchResponseDto> getAllListDTO = new ArrayList<>();
+        search.forEach(s->getAllListDTO.add(SearchResponseDto.getSearchDTO(s)));
+        return getAllListDTO;
     }
+    //관련 키워드 조회
+    public List<SearchResponseDto> getKeyword(Long studentId, SearchRequestDto.CheckDto request) {
+        User user = findByStudentId(studentId);
+
+        //400 데이터 미입력
+        if(request.getKeyword().isEmpty()){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        List<Search> searchKeyword = findByKeywordContaining(request.getKeyword());
+        List <SearchResponseDto>  getList = new ArrayList<>();
+        searchKeyword.forEach(s-> getList.add(SearchResponseDto.getSearchDTO(s)));
+        return getList;
+
+    }
+
 
     //검색어 등록
     public Boolean registerKeyword(Long studentId, SearchRequestDto.RegisterDto request) throws Exception{
@@ -81,4 +96,9 @@ public class SearchService {
         return searchRepository.findBySearchId(searchId)
                 .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_ID));
     }
+
+    public List<Search>  findByKeywordContaining(String keyword) {
+        return searchRepository.findByKeywordContaining(keyword);
+    }
+
 }

@@ -17,6 +17,9 @@ public class SearchRequestDto {
 
     }
 
-
-
+    @Getter
+    @Setter
+    public class CheckDto {
+        private String keyword;
+    }
 }

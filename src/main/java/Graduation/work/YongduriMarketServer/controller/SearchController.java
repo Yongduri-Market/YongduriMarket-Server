@@ -3,6 +3,7 @@ package Graduation.work.YongduriMarketServer.controller;
 import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
 import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchRequestDto;
+import Graduation.work.YongduriMarketServer.dto.SearchResponseDto;
 import Graduation.work.YongduriMarketServer.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<List> getAllKeyword() throws Exception{
         return new ResponseEntity<List>(searchService.getAllKeyword(), HttpStatus.OK);
+    }
+
+    //관련 키워드 조회
+    @GetMapping(value = "/keyword")
+    public ResponseEntity<List<SearchResponseDto>> getKeyword(@AuthenticationPrincipal CustomUserDetails user,SearchRequestDto.CheckDto request) throws Exception{
+        return new ResponseEntity<List<SearchResponseDto>>(searchService.getKeyword(user.getStudentId(),request), HttpStatus.OK);
     }
 
 

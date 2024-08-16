@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface SearchRepository extends JpaRepository<Search, Long> {
 
     List<Search> findByOrderByCreatedAtDesc();
-
+    List<Search> findByKeywordContaining(String keyword);
     Optional<Search> findBySearchId(Long searchId);
 
 
