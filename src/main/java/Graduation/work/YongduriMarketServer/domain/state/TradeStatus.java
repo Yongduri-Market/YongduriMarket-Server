@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum TradeStatus {
-    ACTIVE(0), // 판매중
-    WAITING(1), // 거래예약
-    FINISHED(2); // 거래완료
+    판매중(0), // 판매중
+    거래예약(1), // 거래예약
+    거래완료(2); // 거래완료
 
     private final int state;
 
@@ -15,11 +15,11 @@ public enum TradeStatus {
     }
 
     public static TradeStatus fromInt(int value) {
-        for (TradeStatus tradeStatus : TradeStatus.values()) {
-            if (tradeStatus.getState() == value) {
-                return tradeStatus;
+        for (TradeStatus status : TradeStatus.values()) {
+            if (status.getState() == value) {
+                return status;
             }
         }
-        throw new IllegalArgumentException("Invalid tradeStatus value: " + value);
+        throw new IllegalArgumentException("Invalid status value: " + value);
     }
 }

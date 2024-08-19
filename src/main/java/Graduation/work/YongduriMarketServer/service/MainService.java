@@ -11,14 +11,14 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class MainService {
     private final TokenRepository tokenRepository;
     private final TokenProvider tokenProvider;
     private final JavaMailSender javaMailSender;;
+    private final BoardService boardService;
 
 
     private String authNum;
@@ -267,4 +268,10 @@ public class MainService {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    public List<BoardResponseDto> getAllMains() throws Exception {
+        return boardService.getAllBoards();
+    }
+    
 }

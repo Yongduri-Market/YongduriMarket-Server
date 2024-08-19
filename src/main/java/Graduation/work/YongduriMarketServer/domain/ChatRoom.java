@@ -30,25 +30,22 @@ public class ChatRoom {
     @Column
     private Long roomId;
 
-    @JoinColumn(name = "board_Id")
+    @JoinColumn(name = "board_id")
     @ManyToOne
     private Board board;
 
-    @JoinColumn(name = "seller_Id")
+    @JoinColumn(name = "seller_id")
     @ManyToOne
     private User seller;
 
-    @JoinColumn(name = "buyer_Id")
+    @JoinColumn(name = "buyer_id")
     @ManyToOne
     private User buyer;
 
 
 
 
-    // 0 거래 미완료, 1 예약 중 , 2 거래 완료
-    @Column
-    @ColumnDefault("0")
-    private Integer tradeStatus;
+
 
     @CreationTimestamp
     @Column

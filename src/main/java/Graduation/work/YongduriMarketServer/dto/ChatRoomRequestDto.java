@@ -23,12 +23,7 @@ public class ChatRoomRequestDto {
     public class DetailDto {
         private Long roomId;
     }
-    @Getter
-    @Setter
-    public class EndTradeDto {
-        private Long roomId;
-        private Long boardId;
-    }
+
     @Getter
     @Setter
     public class DeleteDto {
@@ -36,11 +31,6 @@ public class ChatRoomRequestDto {
 
     }
 
-    @Getter
-    @Setter
-    public class reserveTradeDto {
-        private Long roomId;
-        private Long boardId;
 
-    }
+
 }

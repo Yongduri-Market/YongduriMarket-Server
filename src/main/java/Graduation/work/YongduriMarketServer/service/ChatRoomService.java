@@ -63,8 +63,8 @@ public class ChatRoomService {
             ChatRoom chatRoom = ChatRoom.builder()
                     .board(board)
                     .seller(user)
-                    .tradeStatus(0)
                     .build();
+            chatRoomRepository.save(chatRoom);
             return true;
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
@@ -92,39 +92,7 @@ public class ChatRoomService {
 
     }
 
-    //거래 종료
-    public Boolean endTrade(Long studentId,ChatRoomRequestDto.EndTradeDto request) {
-        User user = findByStudentId(studentId);
-        ChatRoom chatRoom = findByRoomId(request.getRoomId());
-        //400 데이터 미입력
-        if(request.getRoomId() == null){
-            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
-        }
-        try{
-            chatRoom.setTradeStatus(2);
-            chatRoomRepository.save(chatRoom);
-            return true;
-        }catch (Exception e){
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
 
-    //거래 예약
-    public Boolean reserveTrade(Long studentId,ChatRoomRequestDto.reserveTradeDto request) {
-        User user = findByStudentId(studentId);
-        ChatRoom chatRoom = findByRoomId(request.getRoomId());
-        //400 데이터미입력
-        if(request.getRoomId() == null){
-            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
-        }
-        try{
-            chatRoom.setTradeStatus(1);
-            chatRoomRepository.save(chatRoom);
-            return true;
-        }catch (Exception e){
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
     private User findByStudentId(Long studentId) {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_MEMBER));

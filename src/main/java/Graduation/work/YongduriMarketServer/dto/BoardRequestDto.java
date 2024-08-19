@@ -1,62 +1,87 @@
 package Graduation.work.YongduriMarketServer.dto;
 
+import Graduation.work.YongduriMarketServer.domain.state.SalesType;
+import Graduation.work.YongduriMarketServer.domain.state.TradeMethodType;
+import Graduation.work.YongduriMarketServer.domain.state.TradePlaceType;
 import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
-@Builder
+
 public class BoardRequestDto {
 
     @Getter
-    public static class LikeDto{
-        private long studentId;
-        private long boardId;
-
-        public LikeDto(long studentId,long boardId){
-            this.studentId = studentId;
-            this.boardId = boardId;
-        }
-    }
-    @Data
-    public static class boardIdDto{
-        private long boardId;
-    }
-
-    @Data
-    public static class DetailDto {
+    @Setter
+    public class DetailDto {
         private Long boardId;
     }
-    @Data
-    public static class BoardWriteDto{
-        private long boardId;
-        private long studentId;
-        private long tradePlace;
-        private long tradeMethod;
-        private TradeStatus status = TradeStatus.ACTIVE;
-        private long salesCategory;
+
+
+    @Getter
+    @Setter
+    public class CreateDto {
+        private TradePlaceType place;
+        private TradeMethodType method;
+        private SalesType sales;
         private String boardTitle;
         private String boardContent;
-        private long hits = 1;
-        private long price;
-        private LocalDateTime createdAt;
+        private Integer price;
+
+
+
     }
-    @Data
-    public static class BoardEditDto{
-        private long boardId;
-        private long studentId;
-        private long tradePlace;
-        private long tradeMethod;
-        private TradeStatus status = TradeStatus.ACTIVE;
-        private long salesCategory;
+
+
+    @Getter
+    @Setter
+    public class UpdateDto {
+        private Long boardId;
+        private TradePlaceType place;
+        private TradeMethodType method;
+        private SalesType sales;
         private String boardTitle;
         private String boardContent;
-        private long hits = 1;
-        private long price;
-        private LocalDateTime updatedAt;
+        private Integer price;
     }
+
+
+
+    @Getter
+    @Setter
+    public class DeleteDto {
+        private Long boardId;
+    }
+
+
+
+    @Getter
+    @Setter
+    public class LikeDto {
+        private Long boardId;
+
+
+    }
+    @Getter
+    @Setter
+    public class UnLikeDto {
+        private Long boardId;
+    }
+
+
+
+    @Getter
+    @Setter
+    public class ReserveTradeDto {
+        private Long boardId;
+
+    }
+    @Getter
+    @Setter
+    public class EndTradeDto {
+        private Long boardId;
+    }
+
 
 
 }

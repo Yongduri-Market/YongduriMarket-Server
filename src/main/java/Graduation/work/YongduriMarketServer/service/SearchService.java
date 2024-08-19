@@ -61,6 +61,7 @@ public class SearchService {
             Search search = Search.builder()
                     .keyword(request.getKeyword())
                     .build();
+            searchRepository.save(search);
             return true;
         }catch (Exception e){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);

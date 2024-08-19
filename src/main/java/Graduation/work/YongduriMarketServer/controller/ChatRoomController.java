@@ -41,16 +41,7 @@ public class ChatRoomController {
         return new ResponseEntity<Boolean>(chatRoomService.deleteChatRoom(user.getStudentId(),request), HttpStatus.OK);
     }
 
-    //거래 종료
-    @PutMapping("/end")
-    public ResponseEntity<Boolean> endTrade(@AuthenticationPrincipal CustomUserDetails user, ChatRoomRequestDto.EndTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(chatRoomService.endTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
-    //거래 예약
-    @PutMapping("/reserve")
-    public ResponseEntity<Boolean> reserveTrade(@AuthenticationPrincipal CustomUserDetails user,ChatRoomRequestDto.reserveTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(chatRoomService.reserveTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
+
 
 
 

@@ -18,15 +18,15 @@ public class Review {
     @Column
     private Long reviewId;
 
-    @JoinColumn(name = "board_Id")
+    @JoinColumn(name = "board_id")
     @ManyToOne
     private Board board;
 
-    @JoinColumn(name = "reviewee_Id",nullable = false)
+    @JoinColumn(name = "reviewee_id",nullable = false)
     @ManyToOne
     private User reviewee;
 
-    @JoinColumn(name = "reviewer_Id",nullable = false)
+    @JoinColumn(name = "reviewer_id",nullable = false)
     @ManyToOne
     private User reviewer;
 

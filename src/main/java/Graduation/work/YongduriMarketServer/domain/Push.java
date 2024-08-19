@@ -17,7 +17,7 @@ public class Push {
     @Column(unique = true, nullable = false)
     private Long pushId;
 
-    @JoinColumn(name = "student_Id",nullable = false)
+    @JoinColumn(name = "student_id",nullable = false)
     @ManyToOne
     private User user;
 

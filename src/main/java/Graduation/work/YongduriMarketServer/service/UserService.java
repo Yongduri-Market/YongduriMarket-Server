@@ -59,7 +59,7 @@ public class UserService {
             user.setNickname(request.getNickname());
             user.setPhone(request.getPhone());
             user.setBirthDate(request.getBirthDate());
-
+            userRepository.save(user);
             return true;
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);

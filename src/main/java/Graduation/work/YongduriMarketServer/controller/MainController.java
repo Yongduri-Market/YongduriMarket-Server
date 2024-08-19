@@ -25,7 +25,10 @@ public class MainController {
     public ResponseEntity<LoginResponseDto> login(LoginRequestDto request) throws Exception{
         return new ResponseEntity<LoginResponseDto>(mainService.login(request), HttpStatus.OK);
     }
-    //@GetMapping(value = "/main")
+    @GetMapping(value = "/main")
+    public ResponseEntity<Object> getAllMains() throws Exception {
+        return new ResponseEntity<>(mainService.getAllMains(), HttpStatus.OK);
+    }
 
     @PostMapping(value = "/join/email")
     public ResponseEntity<String>joinEmail(EmailRequestDto request) throws  Exception{

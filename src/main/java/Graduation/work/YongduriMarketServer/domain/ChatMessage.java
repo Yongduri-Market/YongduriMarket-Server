@@ -21,16 +21,16 @@ public class ChatMessage {
     private Long messageId;
 
     @ManyToOne
-    @JoinColumn(name = "room_Id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false)
     private ChatRoom chatRoom;
 
 
     @ManyToOne
-    @JoinColumn(name = "sender_Id", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = false)
     private User senderNickname;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_Id")
+    @JoinColumn(name = "receiver_id")
     private User receiverNickname;
 
     @Column(nullable = false)

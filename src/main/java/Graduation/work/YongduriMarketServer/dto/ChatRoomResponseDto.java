@@ -18,7 +18,6 @@ public class ChatRoomResponseDto {
     private Long boardId;
     private Long seller;
     private Long buyer;
-    private Integer tradeStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -29,7 +28,6 @@ public class ChatRoomResponseDto {
                 chatRoom.getBoard().getBoardId(),
                 chatRoom.getSeller().getStudentId(),
                 chatRoom.getBuyer().getStudentId(),
-                chatRoom.getTradeStatus(),
                 chatRoom.getCreatedAt(),
                 chatRoom.getUpdatedAt()
         );

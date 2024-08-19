@@ -5,6 +5,7 @@ import Graduation.work.YongduriMarketServer.domain.Board;
 import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.dto.BoardRequestDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
+import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -28,47 +29,55 @@ public class BoardController {
 
     //게시글 전체 조회
     @GetMapping
-    public ResponseEntity<List> boardList(){
-        return new ResponseEntity<List>(boardService.boardList(), HttpStatus.OK);
+    public ResponseEntity<List> getAllBoards()throws Exception {
+        return new ResponseEntity<List>(boardService.getAllBoards(), HttpStatus.OK);
     }
     //게시글 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<BoardResponseDto> boardDetail(BoardRequestDto.DetailDto request)  throws Exception{
-        return new ResponseEntity<BoardResponseDto>(boardService.boardDetail(request), HttpStatus.OK);
+    public ResponseEntity<BoardResponseDto> getBoardDetail(BoardRequestDto.DetailDto request)  throws Exception{
+        return new ResponseEntity<BoardResponseDto>(boardService.getBoardDetail(request), HttpStatus.OK);
     }
     //게시글 등록
-    @PostMapping("/write")
-    public ResponseEntity<?> boardWrite(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.BoardWriteDto request) throws Exception {
-        boardService.boardWrite(user.getStudentId(), request);
-        return ResponseEntity.ok().build();
+    @PostMapping
+    public ResponseEntity<Boolean> createBoard(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.CreateDto request) throws Exception {
+        return new ResponseEntity<Boolean>(boardService.createBoard(user.getStudentId(),request), HttpStatus.OK);
     }
     // 게시글 수정
-    @PutMapping("/edit")
-    public ResponseEntity<?> boardEdit(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.BoardEditDto request) throws Exception{
-        boardService.boardEdit(user.getStudentId(), request);
-        return ResponseEntity.ok().build();
+    @PutMapping
+    public ResponseEntity<Boolean> updateBoard(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.UpdateDto request) throws Exception{
+        return new ResponseEntity<Boolean>(boardService.updateBoard(user.getStudentId(),request), HttpStatus.OK);
     }
     //게시글 삭제
     @DeleteMapping
-    public ResponseEntity<?> boardDelete(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.boardIdDto request)throws Exception{
-        boardService.boardDelete(user.getStudentId(), request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Boolean> deleteBoard(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.DeleteDto request)throws Exception{
+        return new ResponseEntity<Boolean>(boardService.deleteBoard(user.getStudentId(),request), HttpStatus.OK);
     }
 
-    /*
-    //좋아요 등록
-    @PostMapping
-    public ResponseEntity<?> likeInsert(@RequestBody @Validated BoardRequestDto.LikeDto likeDto){
-        boardService.likeInsert(likeDto);
-        return new ResponseEntity<>("like insert complete", HttpStatus.OK);
-    }
-    //좋아요 취소
-    @DeleteMapping
-    public ResponseEntity<?> likeDelete(@RequestBody @Validated BoardRequestDto.LikeDto likeDto){
-        boardService.likeDelete(likeDto);
-        return new ResponseEntity<>("like delete complete", HttpStatus.OK);
-    }
-    */
 
+    //게시글 좋아요
+    @PutMapping("/like")
+    public ResponseEntity<Boolean> likeBoard(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.LikeDto request) throws Exception {
+
+        System.out.println("Received LikeDto: " + request); // DTO 객체 출력
+        System.out.println("Board ID: " + request.getBoardId()); // Board ID 확인
+        return new ResponseEntity<Boolean>(boardService.likeBoard(user.getStudentId(),request), HttpStatus.OK);
+    }
+
+    //게시글 좋아요 해제
+    @PutMapping("/unlike")
+    public ResponseEntity<Boolean> unlikeBoard(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.UnLikeDto request) throws Exception {
+        return new ResponseEntity<Boolean>(boardService.unlikeBoard(user.getStudentId(),request), HttpStatus.OK);
+    }
+
+    //거래 완료
+    @PutMapping("/end")
+    public ResponseEntity<Boolean> endTrade(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.EndTradeDto request) throws Exception{
+        return new ResponseEntity<Boolean>(boardService.endTrade(user.getStudentId(),request), HttpStatus.OK);
+    }
+    //거래 예약
+    @PutMapping("/reserve")
+    public ResponseEntity<Boolean> reserveTrade(@AuthenticationPrincipal CustomUserDetails user,BoardRequestDto.ReserveTradeDto request) throws Exception{
+        return new ResponseEntity<Boolean>(boardService.reserveTrade(user.getStudentId(),request), HttpStatus.OK);
+    }
 
 }

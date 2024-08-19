@@ -1,179 +1,236 @@
 package Graduation.work.YongduriMarketServer.service;
 
 import Graduation.work.YongduriMarketServer.domain.Board;
+import Graduation.work.YongduriMarketServer.domain.BoardLike;
 import Graduation.work.YongduriMarketServer.domain.User;
+import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
 import Graduation.work.YongduriMarketServer.dto.BoardRequestDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 //import Graduation.work.YongduriMarketServer.dto.BoardResponseSavedIdDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
+import Graduation.work.YongduriMarketServer.repository.LikeRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 //import com.google.api.gax.rpc.NotFoundException;
-import org.springframework.util.StringUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+
 
     //게시글 전체 조회
-    @Transactional
-    public List<Board> boardList() {
-        try {
-            List<Board> boards = boardRepository.findAll();
-            return boards;
+    public List<BoardResponseDto> getAllBoards() throws Exception{
+        List<Board> board = boardRepository.findByOrderByCreatedAtDesc();
+        List<BoardResponseDto> getListDto = new ArrayList<>();
+        board.forEach(s-> getListDto.add(BoardResponseDto.getBoardDto(s)));
+        return getListDto;
+    }
 
-        } catch (Exception e) {
+    // 게시글  상세 조회
+    public BoardResponseDto getBoardDetail(BoardRequestDto.DetailDto request)throws Exception {
+        Board board= findByBoardId(request.getBoardId());
+        try{
+            return BoardResponseDto.getBoardDto(board);
+        }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 게시글 단건 조회
-    @Transactional(readOnly = true)
-    public BoardResponseDto boardDetail(BoardRequestDto.DetailDto request) throws Exception {
-        Board board = boardRepository.findByBoardId(request.getBoardId()).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_EXIST_ID);
-        });
-        try {
-            BoardResponseDto response = BoardResponseDto.GetBoardDetailDto(board);
-            return response;
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
+
     // 게시글 작성
-    @Transactional
-    public void boardWrite(Long studentId, BoardRequestDto.BoardWriteDto requestDto) throws Exception{
-        try {
-            User user = findByStudentId(studentId);
-
+    public Boolean createBoard(Long studentId, BoardRequestDto.CreateDto request) throws Exception{
+        User user = findByStudentId(studentId);
+        if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
+        request.getPrice() == null || request.getSales() == null || request.getPlace() == null
+                || request.getMethod() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        try{
             Board board = Board.builder()
                     .user(user)
-                    .tradePlace(requestDto.getTradePlace())
-                    .tradeMethod(requestDto.getTradeMethod())
-                    .status(requestDto.getStatus())
-                    .salesCategory(requestDto.getSalesCategory())
-                    .boardTitle(requestDto.getBoardTitle())
-                    .boardContent(requestDto.getBoardContent())
-                    .hits(requestDto.getHits())
-                    .price(requestDto.getPrice())
-                    .createdAt(LocalDateTime.now())
+                    .place(request.getPlace())
+                    .method(request.getMethod())
+                    .status(TradeStatus.판매중)
+                    .sales(request.getSales())
+                    .boardTitle(request.getBoardTitle())
+                    .boardContent(request.getBoardContent())
+                    .price(request.getPrice())
                     .build();
             boardRepository.save(board);
-        }
-        catch (Exception e){
+            return true;
+        }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     //게시글 수정
-    @Transactional
-    public void boardEdit(long studentId, BoardRequestDto.BoardEditDto requestDto)throws Exception{
+    public Boolean updateBoard(Long studentId, BoardRequestDto.UpdateDto request) throws Exception{
         User user = findByStudentId(studentId);
-        //1. 기존 게시글 꺼내와서
-        Optional<Board> board = boardRepository.findById(requestDto.getBoardId());
-
-        //존재하지 않는 게시글
-        if(board.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_EXIST_ID);
+        Board board= findByBoardId(request.getBoardId());
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
+                request.getPrice() == null || request.getSales() == null || request.getPlace() == null
+                || request.getMethod() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
 
-        Board existBoard = board.get();
+        //자기가 쓴 글이 아닐 때
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
 
-        //권한 없음
-        if(!existBoard.getUser().equals(user)) {
-            throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
         }
-
-        //2. 게시글에 boardUpdate 덮어씌우기
         try{
-            existBoard.setTradePlace(requestDto.getTradePlace());
-            existBoard.setTradeMethod(requestDto.getTradeMethod());
-            existBoard.setStatus(requestDto.getStatus());
-            existBoard.setSalesCategory(requestDto.getSalesCategory());
-            existBoard.setBoardTitle(requestDto.getBoardTitle());
-            existBoard.setBoardContent(requestDto.getBoardContent());
-            existBoard.setPrice(requestDto.getPrice());
-            existBoard.setUpdatedAt(LocalDateTime.now());
-            boardRepository.save(existBoard);
-        }
-        catch (Exception e){
+            board.setBoardTitle(request.getBoardTitle());
+            board.setBoardContent(request.getBoardContent());
+            board.setPrice(request.getPrice());
+            board.setSales(request.getSales());
+            board.setPlace(request.getPlace());
+            board.setMethod(request.getMethod());
+            boardRepository.save(board);
+            return true;
+        }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
     //게시글 삭제
-    @Transactional
-    public void boardDelete(long studentId, BoardRequestDto.boardIdDto requestDto) throws Exception{
+    public Boolean deleteBoard(Long studentId, BoardRequestDto.DeleteDto request)throws Exception{
         User user = findByStudentId(studentId);
-        Board board = findByBoardId(requestDto.getBoardId());
-        Optional<Board> opBoard = boardRepository.findById(requestDto.getBoardId());
-
-        // 404
-        if(opBoard.isEmpty()) throw new CustomException(ErrorCode.NOT_EXIST_ID);
-        // 403
-        if(!opBoard.get().getUser().equals(user)) throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
-
-        try{
-            boardRepository.delete(board);
+        Board board= findByBoardId(request.getBoardId());
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        catch (Exception e){
+        try{
+            boardRepository.deleteById(request.getBoardId());
+            return true;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // 게시글 좋아요
+    public Boolean likeBoard(Long studentId, BoardRequestDto.LikeDto request) throws Exception{
+        User user = findByStudentId(studentId);
+        Board board = findByBoardId(request.getBoardId());
+        Optional<BoardLike> existingLike = likeRepository.findByBoardAndUser(board, user);
+        //400 데이터 미입력
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        if (existingLike.isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE);
+        }
+        try{
+            BoardLike like = BoardLike.builder()
+                    .user(user)
+                    .board(board)
+                    .build();
+            likeRepository.save(like);
+
+            board.setLikeCount(board.getLikeCount() + 1);
+            boardRepository.save(board);
+
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
+    }
 
+    // 게시글 좋아요 해제
+    public Boolean unlikeBoard(Long studentId, BoardRequestDto.UnLikeDto request) throws Exception{
+        User user = findByStudentId(studentId);
+        Board board= findByBoardId(request.getBoardId());
+        Optional<BoardLike> existingLike = likeRepository.findByBoardAndUser(board, user);
+        //400 데이터 미입력
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+
+        BoardLike boardLike = likeRepository.findByBoardAndUser(board, user)
+                .orElseThrow(() -> new CustomException(ErrorCode.INSUFFICIENT_DATA));
+        try{
+            likeRepository.delete(boardLike);
+
+            // 게시글의 좋아요 수 감소
+            board.setLikeCount(board.getLikeCount() - 1);
+            boardRepository.save(board);
+
+
+            return true;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
-    // 좋아요 추가
-    /*public void likeInsert(BoardRequestDto.LikeDto likeDto) throws Exception {
-        User user = userRepository.findById(likeDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-        Board board = boardRepository.findById(likeDto.getBoardId())
-                .orElseThrow(() -> new RuntimeException("게시글 정보를 찾을 수 없습니다."));
-        // 이미 좋아요되어있으면 에러 반환
-        if (boardRepository.findByUserAndBoard(user, board).isPresent()){
-            //TODO 409에러로 변경
-            throw new Exception();
+
+
+
+
+    //거래 완료
+    public Boolean endTrade(Long studentId, BoardRequestDto.EndTradeDto request) {
+        User user = findByStudentId(studentId);
+        Board board= findByBoardId(request.getBoardId());
+        //400 데이터 미입력
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+        //자기가 쓴 글이 아닐 때
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
+        }
+        try{
+            board.setStatus(TradeStatus.거래완료);
+            boardRepository.save(board);
 
-        Board like = Board.builder()
-                .board(board)
-                .user(user)
-                .build();
+            return true;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        boardRepository.save(like);
-        //boardRepository.updateCount(board,true); //2번째 매개변수가 true 라면 +1 false 라면 -1 입니다.
+    //거래 예약
+    public Boolean reserveTrade(Long studentId,BoardRequestDto.ReserveTradeDto request) {
+        User user = findByStudentId(studentId);
+        Board board= findByBoardId(request.getBoardId());
+        //400 데이터미입력
+        if(request.getBoardId() == null){
+            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        }
+        //자기가 쓴 글이 아닐 때
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
+        }
+        try{
+            board.setStatus(TradeStatus.거래예약);
+
+            boardRepository.save(board);
+
+            return true;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
-    public void likeDelete(BoardRequestDto.LikeDto likeDto){
-        User user = userRepository.findById(likeDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("유저 정보를 찾을 수 없습니다."));
-
-        Board board = boardRepository.findById(likeDto.getBoardId())
-                .orElseThrow(() -> new RuntimeException("게시글 정보를 찾을 수 없습니다."));
-
-        //Board like = boardRepository.findByUserAndBoard(user, board)
-        //        .orElseThrow(() -> new RuntimeException("좋아요 정보를 찾을 수 없습니다."));
-
-        //boardRepository.delete(like);
-        //boardRepository.updateCount(board,true);
-        }
-
-    }*/
 
     public User findByStudentId(Long studentId) {
         return userRepository.findByStudentId(studentId)
@@ -183,4 +240,11 @@ public class BoardService {
         return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
+    public Board findByBoardIdAndUser(Long boardId, User user) {
+        return boardRepository.findByBoardIdAndUser(boardId, user)
+                .orElseThrow(() -> new CustomException(ErrorCode.NO_AUTH));
+    }
+
+
+
 }
