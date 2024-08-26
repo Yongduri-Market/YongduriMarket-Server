@@ -21,13 +21,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<List> reviewList(@AuthenticationPrincipal CustomUserDetails user) throws Exception{
-        return new ResponseEntity<List>(reviewService.ReviewList(user.getStudentId()), HttpStatus.OK);
+    public ResponseEntity<List> getReview() throws Exception{
+        return new ResponseEntity<List>(reviewService.getReview(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> reviewWrite(@AuthenticationPrincipal CustomUserDetails user, ReviewRequestDto.ReviewWriteDto request) throws Exception{
-        reviewService.reviewWrite(user.getStudentId(), request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Boolean> writeReview(@AuthenticationPrincipal CustomUserDetails user, ReviewRequestDto.ReviewWriteDto request) throws Exception{
+        return new ResponseEntity<Boolean>(reviewService.writeReview(user.getStudentId(),request), HttpStatus.OK);
     }
 }

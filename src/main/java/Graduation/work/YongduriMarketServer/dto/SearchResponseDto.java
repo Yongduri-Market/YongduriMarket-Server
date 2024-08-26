@@ -24,7 +24,7 @@ public class SearchResponseDto
 
 
 
-    public static SearchResponseDto getSearchDTO(Search search) {
+    public static SearchResponseDto getSearchDto(Search search) {
         return new SearchResponseDto(
                 search.getSearchId(),
                 search.getKeyword(),

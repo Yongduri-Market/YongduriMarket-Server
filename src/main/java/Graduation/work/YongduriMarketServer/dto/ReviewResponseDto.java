@@ -1,24 +1,25 @@
 package Graduation.work.YongduriMarketServer.dto;
 
 import Graduation.work.YongduriMarketServer.domain.Review;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ReviewResponseDto {
     private Long reviewId;
 
-    private Long board_Id;
+    private Long boardId;
 
-    private Long reviewee_Id;
+    private Long roomId;
 
-    private Long reviewer_Id;
+    private Long revieweeId;
+
+    private Long reviewerId;
 
     private Integer assessment;
 
@@ -30,10 +31,11 @@ public class ReviewResponseDto {
 
     private LocalDateTime updatedAt;
 
-    public static ReviewResponseDto GetReviewDetailDto(Review review){
+    public static ReviewResponseDto getReviewDto(Review review){
         return new ReviewResponseDto(
                 review.getReviewId(),
                 review.getBoard().getBoardId(),
+                review.getChatRoom().getRoomId(),
                 review.getReviewee().getStudentId(),
                 review.getReviewer().getStudentId(),
                 review.getAssessment(),

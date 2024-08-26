@@ -31,7 +31,7 @@ public class ChatRoomService {
     public List<ChatRoomResponseDto> getAllChatRoom()throws Exception{
         List<ChatRoom>  chatRoom = chatRoomRepository.findByOrderByCreatedAtDesc();
         List<ChatRoomResponseDto> getListDTO = new ArrayList<>();
-        chatRoom.forEach(s-> getListDTO.add(ChatRoomResponseDto.getChatRoomDTO(s)));
+        chatRoom.forEach(s-> getListDTO.add(ChatRoomResponseDto.getChatRoomDto(s)));
         return getListDTO;
     }
 
@@ -39,7 +39,7 @@ public class ChatRoomService {
     public ChatRoomResponseDto getChatRoomDetails(ChatRoomRequestDto.DetailDto request) throws Exception {
         ChatRoom chatRoom = findByRoomId(request.getRoomId());
         try{
-            return ChatRoomResponseDto.getChatRoomDTO(chatRoom);
+            return ChatRoomResponseDto.getChatRoomDto(chatRoom);
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }

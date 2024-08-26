@@ -22,7 +22,7 @@ public class ChatRoomResponseDto {
     private LocalDateTime updatedAt;
 
 
-    public static ChatRoomResponseDto getChatRoomDTO(ChatRoom chatRoom) {
+    public static ChatRoomResponseDto getChatRoomDto(ChatRoom chatRoom) {
         return new ChatRoomResponseDto(
                 chatRoom.getRoomId(),
                 chatRoom.getBoard().getBoardId(),

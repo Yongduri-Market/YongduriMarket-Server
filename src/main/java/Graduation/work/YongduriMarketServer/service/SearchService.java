@@ -29,9 +29,9 @@ public class SearchService {
     //전체조회
     public List <SearchResponseDto>getAllKeyword() throws Exception{
         List<Search> search = searchRepository.findByOrderByCreatedAtDesc();
-        List <SearchResponseDto> getAllListDTO = new ArrayList<>();
-        search.forEach(s->getAllListDTO.add(SearchResponseDto.getSearchDTO(s)));
-        return getAllListDTO;
+        List <SearchResponseDto> getAllListDto = new ArrayList<>();
+        search.forEach(s->getAllListDto.add(SearchResponseDto.getSearchDto(s)));
+        return getAllListDto;
     }
     //관련 키워드 조회
     public List<SearchResponseDto> getKeyword(Long studentId, SearchRequestDto.CheckDto request) {
@@ -43,7 +43,7 @@ public class SearchService {
         }
         List<Search> searchKeyword = findByKeywordContaining(request.getKeyword());
         List <SearchResponseDto>  getList = new ArrayList<>();
-        searchKeyword.forEach(s-> getList.add(SearchResponseDto.getSearchDTO(s)));
+        searchKeyword.forEach(s-> getList.add(SearchResponseDto.getSearchDto(s)));
         return getList;
 
     }

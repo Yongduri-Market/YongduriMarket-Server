@@ -3,7 +3,6 @@ package Graduation.work.YongduriMarketServer.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 @Entity
@@ -18,14 +17,21 @@ public class Review {
     @Column
     private Long reviewId;
 
-    @JoinColumn(name = "board_id")
+    @JoinColumn
     @ManyToOne
     private Board board;
 
+    @JoinColumn
+    @ManyToOne
+    private ChatRoom chatRoom;
+
+    //후기 받는 사람
     @JoinColumn(name = "reviewee_id",nullable = false)
     @ManyToOne
     private User reviewee;
 
+
+    //후기 작성한 사람
     @JoinColumn(name = "reviewer_id",nullable = false)
     @ManyToOne
     private User reviewer;
@@ -45,7 +51,9 @@ public class Review {
 
     // 0 작성 안 함, 1 작성 함
     @Column
-    private Integer reviewStatus;
+    @Builder.Default
+    private Integer reviewStatus = 0;
+
 
 
 
@@ -56,4 +64,6 @@ public class Review {
     @CreationTimestamp
     @Column
     private LocalDateTime updatedAt;
+
+
 }

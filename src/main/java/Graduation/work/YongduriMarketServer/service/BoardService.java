@@ -115,6 +115,9 @@ public class BoardService {
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
+        }
         try{
             boardRepository.deleteById(request.getBoardId());
             return true;
@@ -128,6 +131,7 @@ public class BoardService {
     public Boolean likeBoard(Long studentId, BoardRequestDto.LikeDto request) throws Exception{
         User user = findByStudentId(studentId);
         Board board = findByBoardId(request.getBoardId());
+        //Board existingLike = findByBoardAndUser(board,user);
         Optional<BoardLike> existingLike = likeRepository.findByBoardAndUser(board, user);
         //400 데이터 미입력
         if(request.getBoardId() == null){
@@ -136,19 +140,22 @@ public class BoardService {
         if (existingLike.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE);
         }
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
+        }
         try{
             BoardLike like = BoardLike.builder()
                     .user(user)
                     .board(board)
                     .build();
             likeRepository.save(like);
-
+            // 게시글의 좋아요 수 증가
             board.setLikeCount(board.getLikeCount() + 1);
             boardRepository.save(board);
 
             return true;
         }catch (Exception e){
-            e.printStackTrace();
+
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
@@ -163,12 +170,14 @@ public class BoardService {
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+        if(!board.getUser().getStudentId().equals(studentId)){
+            throw new CustomException(ErrorCode.NO_AUTH);
+        }
 
         BoardLike boardLike = likeRepository.findByBoardAndUser(board, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.INSUFFICIENT_DATA));
         try{
             likeRepository.delete(boardLike);
-
             // 게시글의 좋아요 수 감소
             board.setLikeCount(board.getLikeCount() - 1);
             boardRepository.save(board);
@@ -240,8 +249,8 @@ public class BoardService {
         return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
-    public Board findByBoardIdAndUser(Long boardId, User user) {
-        return boardRepository.findByBoardIdAndUser(boardId, user)
+    public Board findByBoardAndUser(Board board, User user) {
+        return boardRepository.findByBoardAndUser(board, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.NO_AUTH));
     }
 

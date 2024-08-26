@@ -27,7 +27,7 @@ public class Search {
 
     @CreationTimestamp
     @Column
-    private LocalDateTime createdAt; //연,월,일,시,분,초
+    private LocalDateTime createdAt; 
 
     @UpdateTimestamp
     @Column
