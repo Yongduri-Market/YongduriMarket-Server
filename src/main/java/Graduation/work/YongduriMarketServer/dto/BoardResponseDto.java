@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BoardResponseDto {
     private Long boardId;
-    private Long studentId;
+    private Long userId;
     private TradePlaceType place;
     private TradeMethodType method;
     private TradeStatus status;
@@ -32,7 +32,7 @@ public class BoardResponseDto {
         return new BoardResponseDto(
 
                 board.getBoardId(),
-                board.getUser().getStudentId(),
+                board.getUserId().getStudentId(),
                 board.getPlace(),
                 board.getMethod(),
                 board.getStatus(),

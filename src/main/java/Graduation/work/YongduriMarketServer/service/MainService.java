@@ -30,7 +30,7 @@ public class MainService {
     private final TokenProvider tokenProvider;
     private final JavaMailSender javaMailSender;;
     private final BoardService boardService;
-
+//
 
     private String authNum;
     private long exp_refreshToken = Duration.ofDays(14).toMillis();
@@ -42,7 +42,7 @@ public class MainService {
         || request.getBirthDate() ==null || request.getPhone() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        //409 - 데이터 중복
+        //409 - 데이터 중복(학번)
         if(userRepository.findByStudentId(request.getStudentId()).isPresent()){
             throw new CustomException(ErrorCode.DUPLICATE);
         }

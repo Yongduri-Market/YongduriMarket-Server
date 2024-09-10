@@ -35,8 +35,9 @@ public class ReportService {
     public ReportResponseDto getUserDetail(ReportRequestDto.DetailDto request)  throws Exception{
         Report report  = findByReportId(request.getReportId());
         try{
-
+            System.out.println(request.getReportId());
             return ReportResponseDto.getReportDto(report);
+
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
@@ -80,9 +81,8 @@ public class ReportService {
                     .userId(user)
                     .toUserId(toUserId)
                     .reportType(ReportType.유저신고)
-                    .reportTypeId(request.getRoomId())
+                    .roomId(request.getRoomId())
                     .reportStatus(ReportStatus.대기중)
-                    .userReportReason(request.getUserReportReason())
                     .build();
             reportRepository.save(report);
             return true;
@@ -94,6 +94,7 @@ public class ReportService {
     // 앱 버그 신고
     public Boolean reportAppBug(Long studentId, ReportRequestDto.BugReportDto request) {
         User user = findByStudentId(studentId);
+
         // 400 -데이터 미입력
         if(request.getReportContents().isEmpty()  ){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
@@ -101,6 +102,8 @@ public class ReportService {
         try{
 
             Report report = Report.builder()
+                    .userId(user)
+                    .toUserId(null)
                     .reportContents(request.getReportContents())
                     .reportType(ReportType.앱버그신고)
                     .reportStatus(ReportStatus.대기중)
@@ -108,6 +111,7 @@ public class ReportService {
             reportRepository.save(report);
             return true;
         }catch (Exception e){
+            e.printStackTrace();
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

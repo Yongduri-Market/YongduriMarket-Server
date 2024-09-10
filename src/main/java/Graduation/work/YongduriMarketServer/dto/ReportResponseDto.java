@@ -17,9 +17,9 @@ public class ReportResponseDto {
     private String reportAnswer;
     private ReportStatus reportStatus;
     private ReportType reportType;
-    private Long reportTypeId;
-    private Integer userReportReason;
+    private Long roomId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static ReportResponseDto getReportDto(Report report) {
         return new ReportResponseDto(
@@ -30,9 +30,9 @@ public class ReportResponseDto {
                 report.getReportAnswer(),
                 report.getReportStatus(),
                 report.getReportType(),
-                report.getReportTypeId(),
-                report.getUserReportReason(),
-                report.getCreatedAt()
+                report.getRoomId(),
+                report.getCreatedAt(),
+                report.getUpdatedAt()
         );
     }
 

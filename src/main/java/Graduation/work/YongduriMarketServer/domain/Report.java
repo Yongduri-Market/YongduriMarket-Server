@@ -4,6 +4,8 @@ import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 @Entity
 @Data
@@ -16,20 +18,20 @@ public class Report {
     @Column
     private Long reportId;
 
-    //신고 하는사람
+    // 신고하는 사람
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    @ManyToOne
     private User userId;
 
-    //신고 당하는 사람
+    // 신고 당하는 사람
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    @ManyToOne
     private User toUserId;
 
     @Column(columnDefinition = "TEXT")
     private String reportContents;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String reportAnswer;
 
     //0 대기중, 1 답변 완료
@@ -44,12 +46,13 @@ public class Report {
     private ReportType reportType;
 
     @Column
-    private Long reportTypeId;
-
-    @Column
-    private Integer userReportReason;
+    private Long roomId;
 
     @CreationTimestamp
     @Column
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
 }

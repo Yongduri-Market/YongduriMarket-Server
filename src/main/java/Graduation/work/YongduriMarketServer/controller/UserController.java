@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +18,30 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+/*
+    // 판매내역 조회
+    @GetMapping("/sell")
+    public ResponseEntity<>getSellList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
+        return new ResponseEntity<>(userService.getSellList(user.getStudentId()), HttpStatus.OK);
+    }
+    // 판매내역 삭제
+    @DeleteMapping("/sell")
+    public ResponseEntity<>deleteSalesHistory(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
+        return new ResponseEntity<>(userService.deleteSellHistory(user.getStudentId()), HttpStatus.OK);
+    }
 
+    // 구매내역 조회
+    @GetMapping("/buy")
+    public ResponseEntity<>getBuyList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
+        return new ResponseEntity<>(userService.getBuyList(user.getStudentId()), HttpStatus.OK);
+    }
+    // 구매내역 삭제
+    @DeleteMapping("/buy")
+    public ResponseEntity<>deleteBuyHistory(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
+        return new ResponseEntity<>(userService.deleteBuyHistory(user.getStudentId()), HttpStatus.OK);
+    }
+*/
+//
     // 내 정보 조회
     @GetMapping
     public ResponseEntity<UserResponseDto>getInfoList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {

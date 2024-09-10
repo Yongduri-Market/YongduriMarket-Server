@@ -67,8 +67,10 @@ public class SecurityConfig {
                         authorize
                                 // 회원가입, 로그인은 모두 승인
                                 .requestMatchers( "/main", "/login", "/join", "/nickname/check", "/join/email","/password/email",
-                                        "/report","/refresh", "/changepwd/mail", "/changepwd", "/token", "/board", "/board/like", "/board/unlike").permitAll()
-                                .requestMatchers("/admin/repot/", "admin/repot/answer").hasRole("ADMIN")
+                                        "/report","/accessToken/reissue", "/changepwd/mail", "/changepwd", "/token",
+                                        "/board", "/board/detail","/board/like", "/board/unlike",
+                                        "/search", "/search/keyword").permitAll()
+                                .requestMatchers("/admin/repot/", "/admin/repot/answer").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 // JWT 인증 필터 적용

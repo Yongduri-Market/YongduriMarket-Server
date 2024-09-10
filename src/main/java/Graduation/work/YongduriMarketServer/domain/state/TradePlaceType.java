@@ -21,7 +21,7 @@ public enum TradePlaceType {
         this.state = state;
     }
 
-    public static TradePlaceType fromInt(int value) {
+    public static TradePlaceType fromInt(Integer value) {
         for (TradePlaceType place : TradePlaceType.values()) {
             if (place.getState() == value) {
                 return place;

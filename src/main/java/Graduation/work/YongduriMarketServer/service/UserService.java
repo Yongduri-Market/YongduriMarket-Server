@@ -50,15 +50,12 @@ public class UserService {
         User user = findByStudentId(studentId);
 
         //400 데이터 미입력
-        if(request.getStudentId() == null){
+        if(request.getNickname() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
 
         try{
-            user.setName(request.getName());
             user.setNickname(request.getNickname());
-            user.setPhone(request.getPhone());
-            user.setBirthDate(request.getBirthDate());
             userRepository.save(user);
             return true;
         }catch (Exception e){

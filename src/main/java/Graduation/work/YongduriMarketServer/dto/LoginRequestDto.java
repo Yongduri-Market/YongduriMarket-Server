@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class LoginRequestDto {
     private Long  studentId;
     private String password;

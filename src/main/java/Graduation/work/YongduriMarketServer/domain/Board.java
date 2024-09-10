@@ -22,12 +22,12 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "board_id")
     private Long boardId;
 
-    @JoinColumn(name = "student_id")
+    @JoinColumn
     @ManyToOne
-    private User user;
+    private User userId;
 
 
     //거래 장소
