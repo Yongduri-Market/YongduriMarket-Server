@@ -34,8 +34,8 @@ public class BoardController {
     }
     //게시글 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<BoardResponseDto> getBoardDetail(BoardRequestDto.DetailDto request)  throws Exception{
-        return new ResponseEntity<BoardResponseDto>(boardService.getBoardDetail(request), HttpStatus.OK);
+    public ResponseEntity<BoardResponseDto> getBoardDetail(@RequestParam Long boardId)  throws Exception{
+        return new ResponseEntity<BoardResponseDto>(boardService.getBoardDetail(boardId), HttpStatus.OK);
     }
     //게시글 등록
     @PostMapping
@@ -69,15 +69,6 @@ public class BoardController {
         return new ResponseEntity<Boolean>(boardService.unlikeBoard(user.getStudentId(),request), HttpStatus.OK);
     }
 
-    //거래 완료
-    @PutMapping("/end")
-    public ResponseEntity<Boolean> endTrade(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.EndTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(boardService.endTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
-    //거래 예약
-    @PutMapping("/reserve")
-    public ResponseEntity<Boolean> reserveTrade(@AuthenticationPrincipal CustomUserDetails user,BoardRequestDto.ReserveTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(boardService.reserveTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
+
 
 }

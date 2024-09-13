@@ -22,10 +22,10 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
+    @Column
     private Long boardId;
 
-    @JoinColumn
+    @JoinColumn(name = "studeint_id")
     @ManyToOne
     private User userId;
 

@@ -41,11 +41,19 @@ public class BoardService {
         return getListDto;
     }
 
-    // 게시글  상세 조회
-    public BoardResponseDto getBoardDetail(BoardRequestDto.DetailDto request) throws Exception {
-        Board board = findByBoardId(request.getBoardId());
-        return BoardResponseDto.getBoardDto(board);
+    // 게시글 상세 조회
+    public BoardResponseDto getBoardDetail(Long boardId) throws Exception {
+        Board board = boardRepository.findByBoardId(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_ID));
+
+        try {
+            return BoardResponseDto.getBoardDto(board);
+        } catch (Exception e) {
+            // Handle any exceptions and wrap them into a custom exception
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
 
 

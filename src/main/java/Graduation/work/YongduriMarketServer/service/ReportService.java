@@ -24,13 +24,21 @@ public class ReportService {
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
 
-    // 신고하기 사용자 전체조회
-    public List<ReportResponseDto> getAllReport() throws Exception{
-        List<Report> report = reportRepository.findByOrderByCreatedAtDesc();
-        List<ReportResponseDto> getListDto = new ArrayList<>();
-        report.forEach(s -> getListDto.add(ReportResponseDto.getReportDto(s)));
-        return getListDto;
+    public List<ReportResponseDto> getAllReport() throws Exception {
+        List<Report> reports = reportRepository.findByOrderByCreatedAtDesc();
+        List<ReportResponseDto> reportDtoList = new ArrayList<>();
+
+        reports.forEach(report -> {
+            ReportResponseDto reportDto = ReportResponseDto.getReportDto(report);
+            if (reportDto.getToUserId() == null) {
+                reportDto.setToUserId(0L);
+            }
+            reportDtoList.add(reportDto);
+        });
+
+        return reportDtoList;
     }
+
     //신고하기 사용자 상세조회
     public ReportResponseDto getUserDetail(ReportRequestDto.DetailDto request)  throws Exception{
         Report report  = findByReportId(request.getReportId());
@@ -103,7 +111,6 @@ public class ReportService {
 
             Report report = Report.builder()
                     .userId(user)
-                    .toUserId(null)
                     .reportContents(request.getReportContents())
                     .reportType(ReportType.앱버그신고)
                     .reportStatus(ReportStatus.대기중)

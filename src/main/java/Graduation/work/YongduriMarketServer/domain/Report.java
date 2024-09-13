@@ -19,12 +19,12 @@ public class Report {
     private Long reportId;
 
     // 신고하는 사람
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn
     private User userId;
 
     // 신고 당하는 사람
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn
     private User toUserId;
 
