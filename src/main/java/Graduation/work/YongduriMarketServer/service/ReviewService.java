@@ -9,7 +9,6 @@ import Graduation.work.YongduriMarketServer.dto.ReviewResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
-import Graduation.work.YongduriMarketServer.repository.ChatRoomRepository;
 import Graduation.work.YongduriMarketServer.repository.ReviewRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-    private final ChatRoomRepository chatRoomRepository;
 
     //리뷰 조회
     public List <ReviewResponseDto> getReview() throws Exception {
@@ -41,7 +39,7 @@ public class ReviewService {
     public Boolean writeReview(Long studentId, ReviewRequestDto.ReviewWriteDto request) {
         User reviewer = findByStudentId(studentId);
         User reviewee = findByStudentId(studentId);
-        ChatRoom chatRoom = findByRoomId(request.getRoomId());
+
         Board board = findByBoardId(request.getBoardId());
         if(request.getBoardId() == null ||request.getRoomId() ==null || request.getRevieweeId() ==null || request.getAssessment() ==null ||
         request.getScope() == null || request.getReviewStatus() == null){
@@ -50,7 +48,6 @@ public class ReviewService {
         try{
             Review review = Review.builder()
                     .board(board)
-                    .chatRoom(chatRoom)
                     .reviewee(reviewee)
                     .reviewer(reviewer)
                     .assessment(request.getAssessment())
@@ -73,10 +70,7 @@ public class ReviewService {
         return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_ID));
     }
-    public ChatRoom findByRoomId(Long roomId) {
-        return chatRoomRepository.findByRoomId(roomId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_ID));
-    }
+
 
 
 }

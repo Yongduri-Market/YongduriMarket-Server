@@ -270,8 +270,6 @@ public class MainService {
     }
 
 
-    public List<BoardResponseDto> getAllMains() throws Exception {
-        return boardService.getAllBoards();
-    }
+
     
 }

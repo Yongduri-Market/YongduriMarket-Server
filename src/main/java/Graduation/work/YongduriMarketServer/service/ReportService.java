@@ -6,7 +6,6 @@ import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
 import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.dto.ReportRequestDto;
 import Graduation.work.YongduriMarketServer.dto.ReportResponseDto;
-import Graduation.work.YongduriMarketServer.repository.ChatRoomRepository;
 import Graduation.work.YongduriMarketServer.repository.ReportRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
@@ -22,7 +21,7 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
-    private final ChatRoomRepository chatRoomRepository;
+
 
     public List<ReportResponseDto> getAllReport() throws Exception {
         List<Report> reports = reportRepository.findByOrderByCreatedAtDesc();
@@ -75,7 +74,7 @@ public class ReportService {
     public Boolean reportUser(Long studentId, ReportRequestDto.UserReportDto request) {
         User user = findByStudentId(studentId);
         User toUserId = findByStudentId(request.getToUserId());
-        ChatRoom chatRoom = findByRoomId(request.getRoomId());
+
 
         // 400 -데이터 미입력
         if(request.getReportContents().isEmpty() || request.getToUserId() == null
@@ -89,7 +88,6 @@ public class ReportService {
                     .userId(user)
                     .toUserId(toUserId)
                     .reportType(ReportType.유저신고)
-                    .roomId(request.getRoomId())
                     .reportStatus(ReportStatus.대기중)
                     .build();
             reportRepository.save(report);
@@ -154,10 +152,7 @@ public class ReportService {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
-    public ChatRoom findByRoomId(Long roomId) {
-        return chatRoomRepository.findByRoomId(roomId)
-                .orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_ID));
-    }
+
 
 
 

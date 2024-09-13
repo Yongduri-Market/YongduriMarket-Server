@@ -15,8 +15,6 @@ public class ReviewResponseDto {
 
     private Long boardId;
 
-    private Long roomId;
-
     private Long revieweeId;
 
     private Long reviewerId;
@@ -35,7 +33,7 @@ public class ReviewResponseDto {
         return new ReviewResponseDto(
                 review.getReviewId(),
                 review.getBoard().getBoardId(),
-                review.getChatRoom().getRoomId(),
+
                 review.getReviewee().getStudentId(),
                 review.getReviewer().getStudentId(),
                 review.getAssessment(),

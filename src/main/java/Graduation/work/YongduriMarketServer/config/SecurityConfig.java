@@ -66,9 +66,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 회원가입, 로그인은 모두 승인
-                                .requestMatchers( "/main", "/login", "/join", "/nickname/check", "/join/email","/password/email",
-                                        "/report", "/report/detail", "/repot/bug", "/repot/user",
-                                        "/accessToken/reissue", "/changepwd/mail", "/changepwd", "/token",
+                                .requestMatchers( "/login", "/join", "/nickname/check", "/join/email","/password/email","/password/change",
+                                      "/user",
+                                        "/report", "/report/detail", "/report/bug", "/report/user",
+                                        "/accessToken/reissue","/token",
+                                        "/review",
                                         "/board", "/board/detail","/board/like", "/board/unlike",
                                         "/search", "/search/keyword").permitAll()
                                 .requestMatchers("/admin/report/", "/admin/report/detail", "/admin/report/answer").hasRole("ADMIN")

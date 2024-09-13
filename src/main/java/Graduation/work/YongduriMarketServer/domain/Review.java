@@ -21,9 +21,7 @@ public class Review {
     @ManyToOne
     private Board board;
 
-    @JoinColumn
-    @ManyToOne
-    private ChatRoom chatRoom;
+
 
     //후기 받는 사람
     @JoinColumn(name = "reviewee_id",nullable = false)

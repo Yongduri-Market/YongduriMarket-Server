@@ -152,9 +152,7 @@ public class BoardService {
         if (existingLike.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE);
         }
-        if(!board.getUserId().getStudentId().equals(studentId)){
-            throw new CustomException(ErrorCode.NO_AUTH);
-        }
+
         try{
             BoardLike like = BoardLike.builder()
                     .user(user)
@@ -182,10 +180,6 @@ public class BoardService {
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        if(!board.getUserId().getStudentId().equals(studentId)){
-            throw new CustomException(ErrorCode.NO_AUTH);
-        }
-
         BoardLike boardLike = likeRepository.findByBoardAndUser(board, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.INSUFFICIENT_DATA));
         try{

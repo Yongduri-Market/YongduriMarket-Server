@@ -23,7 +23,7 @@ public class BoardResponseDto {
     private String boardTitle;
     private String boardContent;
     private Integer price;
-
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -40,6 +40,7 @@ public class BoardResponseDto {
                 board.getBoardTitle(),
                 board.getBoardContent(),
                 board.getPrice(),
+                board.getLikeCount(),
                 board.getCreatedAt(),
                 board.getUpdatedAt()
         );
