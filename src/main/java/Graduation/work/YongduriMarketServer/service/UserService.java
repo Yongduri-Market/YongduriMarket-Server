@@ -1,9 +1,14 @@
 package Graduation.work.YongduriMarketServer.service;
 
+import Graduation.work.YongduriMarketServer.domain.Board;
+import Graduation.work.YongduriMarketServer.domain.BoardLike;
 import Graduation.work.YongduriMarketServer.domain.User;
+import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.dto.UserResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
+import Graduation.work.YongduriMarketServer.repository.BoardLikeRepository;
+import Graduation.work.YongduriMarketServer.repository.BoardRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +17,29 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
 
+    private final BoardLikeRepository boardLikeRepository;
+    private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-
+    // 유저가 좋아요를 누른 게시글 목록 조회
+    public List<BoardResponseDto> getLikedBoards(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<BoardLike> boardLikes = boardLikeRepository.findByUser(user);
+        List<Board> likedBoards = boardLikes.stream()
+                .map(BoardLike::getBoard)
+                .collect(Collectors.toList());
+        return likedBoards.stream()
+                .map(BoardResponseDto::getBoardDto)
+                .collect(Collectors.toList());
+    }
     // 내 정보 조회
     public UserResponseDto getInfoList(Long studentId) throws Exception{
 

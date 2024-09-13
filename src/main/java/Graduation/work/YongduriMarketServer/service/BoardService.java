@@ -13,7 +13,7 @@ import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
-import Graduation.work.YongduriMarketServer.repository.LikeRepository;
+import Graduation.work.YongduriMarketServer.repository.BoardLikeRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 //import com.google.api.gax.rpc.NotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,7 +30,7 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final LikeRepository likeRepository;
+    private final BoardLikeRepository likeRepository;
 
 
     //게시글 전체 조회

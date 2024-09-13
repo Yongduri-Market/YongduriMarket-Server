@@ -1,7 +1,6 @@
 package Graduation.work.YongduriMarketServer.service;
 
 import Graduation.work.YongduriMarketServer.domain.Board;
-import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Review;
 import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.dto.ReviewRequestDto;
@@ -13,12 +12,9 @@ import Graduation.work.YongduriMarketServer.repository.ReviewRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

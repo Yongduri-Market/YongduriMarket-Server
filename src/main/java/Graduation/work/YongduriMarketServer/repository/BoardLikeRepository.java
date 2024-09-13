@@ -6,10 +6,12 @@ import Graduation.work.YongduriMarketServer.domain.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 @Transactional
-public interface LikeRepository  extends JpaRepository<BoardLike, Long> {
+public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
      Optional<BoardLike> findByBoardAndUser(Board board, User user);
+     List<BoardLike> findByUser(User user);
 
 
 }

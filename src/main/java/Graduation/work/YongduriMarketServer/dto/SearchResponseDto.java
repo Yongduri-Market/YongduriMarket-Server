@@ -1,11 +1,7 @@
 package Graduation.work.YongduriMarketServer.dto;
 
-import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Search;
-import jakarta.persistence.Column;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 

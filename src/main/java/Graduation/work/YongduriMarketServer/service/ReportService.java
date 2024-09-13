@@ -1,5 +1,4 @@
 package Graduation.work.YongduriMarketServer.service;
-import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Report;
 import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;

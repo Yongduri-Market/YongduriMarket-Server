@@ -28,6 +28,7 @@ public class BoardResponseDto {
     private LocalDateTime updatedAt;
 
 
+
     public static BoardResponseDto getBoardDto(Board board){
         return new BoardResponseDto(
 

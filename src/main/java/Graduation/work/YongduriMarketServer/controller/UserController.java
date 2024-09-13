@@ -2,7 +2,9 @@ package Graduation.work.YongduriMarketServer.controller;
 
 import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
 import Graduation.work.YongduriMarketServer.domain.User;
+import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.dto.UserResponseDto;
+import Graduation.work.YongduriMarketServer.service.BoardService;
 import Graduation.work.YongduriMarketServer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,30 +20,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-/*
-    // 판매내역 조회
-    @GetMapping("/sell")
-    public ResponseEntity<>getSellList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
-        return new ResponseEntity<>(userService.getSellList(user.getStudentId()), HttpStatus.OK);
-    }
-    // 판매내역 삭제
-    @DeleteMapping("/sell")
-    public ResponseEntity<>deleteSalesHistory(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
-        return new ResponseEntity<>(userService.deleteSellHistory(user.getStudentId()), HttpStatus.OK);
-    }
 
-    // 구매내역 조회
-    @GetMapping("/buy")
-    public ResponseEntity<>getBuyList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
-        return new ResponseEntity<>(userService.getBuyList(user.getStudentId()), HttpStatus.OK);
-    }
-    // 구매내역 삭제
-    @DeleteMapping("/buy")
-    public ResponseEntity<>deleteBuyHistory(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
-        return new ResponseEntity<>(userService.deleteBuyHistory(user.getStudentId()), HttpStatus.OK);
-    }
-*/
-//
+
+
+
     // 내 정보 조회
     @GetMapping
     public ResponseEntity<UserResponseDto>getInfoList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
@@ -53,6 +35,10 @@ public class UserController {
     public ResponseEntity<Boolean>infoUpdate(@AuthenticationPrincipal CustomUserDetails user,UserResponseDto request)throws Exception {
         return new ResponseEntity<Boolean>(userService.infoUpdate(user.getStudentId(), request), HttpStatus.OK);
     }
-
+    // 좋아요 목록 조회
+    @GetMapping("/likeList")
+    public ResponseEntity<List<BoardResponseDto>> getLikedBoards(@AuthenticationPrincipal CustomUserDetails user) throws Exception {
+        return new ResponseEntity<>(userService.getLikedBoards(user.getStudentId()), HttpStatus.OK);
+    }
 
 }

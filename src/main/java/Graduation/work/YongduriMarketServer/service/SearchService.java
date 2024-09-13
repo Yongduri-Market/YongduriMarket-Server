@@ -1,9 +1,7 @@
 package Graduation.work.YongduriMarketServer.service;
 
-import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Search;
 import Graduation.work.YongduriMarketServer.domain.User;
-import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
@@ -14,7 +12,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
