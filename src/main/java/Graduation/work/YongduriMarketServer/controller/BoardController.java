@@ -1,23 +1,15 @@
 package Graduation.work.YongduriMarketServer.controller;
 
 import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
-import Graduation.work.YongduriMarketServer.domain.Board;
-import Graduation.work.YongduriMarketServer.domain.User;
 import Graduation.work.YongduriMarketServer.dto.BoardRequestDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
-import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import javax.swing.plaf.nimbus.State;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,8 +26,8 @@ public class BoardController {
     }
     //게시글 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<BoardResponseDto> getBoardDetail(BoardRequestDto.DetailDto request)  throws Exception{
-        return new ResponseEntity<BoardResponseDto>(boardService.getBoardDetail(request), HttpStatus.OK);
+    public ResponseEntity<BoardResponseDto> getBoardDetail(@RequestParam Long boardId)  throws Exception{
+        return new ResponseEntity<BoardResponseDto>(boardService.getBoardDetail(boardId), HttpStatus.OK);
     }
     //게시글 등록
     @PostMapping
@@ -69,15 +61,6 @@ public class BoardController {
         return new ResponseEntity<Boolean>(boardService.unlikeBoard(user.getStudentId(),request), HttpStatus.OK);
     }
 
-    //거래 완료
-    @PutMapping("/end")
-    public ResponseEntity<Boolean> endTrade(@AuthenticationPrincipal CustomUserDetails user, BoardRequestDto.EndTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(boardService.endTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
-    //거래 예약
-    @PutMapping("/reserve")
-    public ResponseEntity<Boolean> reserveTrade(@AuthenticationPrincipal CustomUserDetails user,BoardRequestDto.ReserveTradeDto request) throws Exception{
-        return new ResponseEntity<Boolean>(boardService.reserveTrade(user.getStudentId(),request), HttpStatus.OK);
-    }
+
 
 }

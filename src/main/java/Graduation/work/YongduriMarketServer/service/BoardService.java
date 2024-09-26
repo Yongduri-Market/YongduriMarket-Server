@@ -3,6 +3,9 @@ package Graduation.work.YongduriMarketServer.service;
 import Graduation.work.YongduriMarketServer.domain.Board;
 import Graduation.work.YongduriMarketServer.domain.BoardLike;
 import Graduation.work.YongduriMarketServer.domain.User;
+import Graduation.work.YongduriMarketServer.domain.state.SalesType;
+import Graduation.work.YongduriMarketServer.domain.state.TradeMethodType;
+import Graduation.work.YongduriMarketServer.domain.state.TradePlaceType;
 import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
 import Graduation.work.YongduriMarketServer.dto.BoardRequestDto;
 import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
@@ -10,7 +13,7 @@ import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
-import Graduation.work.YongduriMarketServer.repository.LikeRepository;
+import Graduation.work.YongduriMarketServer.repository.BoardLikeRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 //import com.google.api.gax.rpc.NotFoundException;
 import jakarta.transaction.Transactional;
@@ -27,7 +30,7 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final LikeRepository likeRepository;
+    private final BoardLikeRepository likeRepository;
 
 
     //게시글 전체 조회
@@ -38,20 +41,27 @@ public class BoardService {
         return getListDto;
     }
 
-    // 게시글  상세 조회
-    public BoardResponseDto getBoardDetail(BoardRequestDto.DetailDto request)throws Exception {
-        Board board= findByBoardId(request.getBoardId());
-        try{
+    // 게시글 상세 조회
+    public BoardResponseDto getBoardDetail(Long boardId) throws Exception {
+        Board board = boardRepository.findByBoardId(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_ID));
+
+        try {
             return BoardResponseDto.getBoardDto(board);
-        }catch (Exception e){
+        } catch (Exception e) {
+
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
 
+
+
     // 게시글 작성
     public Boolean createBoard(Long studentId, BoardRequestDto.CreateDto request) throws Exception{
         User user = findByStudentId(studentId);
+
+
         if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
         request.getPrice() == null || request.getSales() == null || request.getPlace() == null
                 || request.getMethod() == null){
@@ -59,11 +69,11 @@ public class BoardService {
         }
         try{
             Board board = Board.builder()
-                    .user(user)
-                    .place(request.getPlace())
-                    .method(request.getMethod())
+                    .userId(user)
+                    .place(TradePlaceType.fromInt(request.getPlace()))
+                    .method(TradeMethodType.fromInt(request.getMethod()))
                     .status(TradeStatus.판매중)
-                    .sales(request.getSales())
+                    .sales(SalesType.fromInt(request.getSales()))
                     .boardTitle(request.getBoardTitle())
                     .boardContent(request.getBoardContent())
                     .price(request.getPrice())
@@ -73,13 +83,15 @@ public class BoardService {
         }catch (Exception e){
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     //게시글 수정
     public Boolean updateBoard(Long studentId, BoardRequestDto.UpdateDto request) throws Exception{
         User user = findByStudentId(studentId);
         Board board= findByBoardId(request.getBoardId());
+
+
+
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
@@ -90,7 +102,7 @@ public class BoardService {
         }
 
         //자기가 쓴 글이 아닐 때
-        if(!board.getUser().getStudentId().equals(studentId)){
+        if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
 
         }
@@ -98,9 +110,9 @@ public class BoardService {
             board.setBoardTitle(request.getBoardTitle());
             board.setBoardContent(request.getBoardContent());
             board.setPrice(request.getPrice());
-            board.setSales(request.getSales());
-            board.setPlace(request.getPlace());
-            board.setMethod(request.getMethod());
+            board.setSales(SalesType.fromInt(request.getSales()));
+            board.setPlace(TradePlaceType.fromInt(request.getPlace()));
+            board.setMethod(TradeMethodType.fromInt(request.getMethod()));
             boardRepository.save(board);
             return true;
         }catch (Exception e){
@@ -111,11 +123,11 @@ public class BoardService {
     //게시글 삭제
     public Boolean deleteBoard(Long studentId, BoardRequestDto.DeleteDto request)throws Exception{
         User user = findByStudentId(studentId);
-        Board board= findByBoardId(request.getBoardId());
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        if(!board.getUser().getStudentId().equals(studentId)){
+        Board board= findByBoardId(request.getBoardId());
+        if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
         }
         try{
@@ -140,9 +152,7 @@ public class BoardService {
         if (existingLike.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE);
         }
-        if(!board.getUser().getStudentId().equals(studentId)){
-            throw new CustomException(ErrorCode.NO_AUTH);
-        }
+
         try{
             BoardLike like = BoardLike.builder()
                     .user(user)
@@ -170,10 +180,6 @@ public class BoardService {
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        if(!board.getUser().getStudentId().equals(studentId)){
-            throw new CustomException(ErrorCode.NO_AUTH);
-        }
-
         BoardLike boardLike = likeRepository.findByBoardAndUser(board, user)
                 .orElseThrow(() -> new CustomException(ErrorCode.INSUFFICIENT_DATA));
         try{
@@ -203,7 +209,7 @@ public class BoardService {
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         //자기가 쓴 글이 아닐 때
-        if(!board.getUser().getStudentId().equals(studentId)){
+        if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
         }
         try{
@@ -225,7 +231,7 @@ public class BoardService {
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         //자기가 쓴 글이 아닐 때
-        if(!board.getUser().getStudentId().equals(studentId)){
+        if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
         }
         try{
@@ -239,8 +245,6 @@ public class BoardService {
         }
     }
 
-
-
     public User findByStudentId(Long studentId) {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
@@ -249,10 +253,9 @@ public class BoardService {
         return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
-    public Board findByBoardAndUser(Board board, User user) {
-        return boardRepository.findByBoardAndUser(board, user)
-                .orElseThrow(() -> new CustomException(ErrorCode.NO_AUTH));
-    }
+
+
+
 
 
 

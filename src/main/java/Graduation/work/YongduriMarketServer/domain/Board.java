@@ -25,9 +25,9 @@ public class Board {
     @Column
     private Long boardId;
 
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "studeint_id")
     @ManyToOne
-    private User user;
+    private User userId;
 
 
     //거래 장소

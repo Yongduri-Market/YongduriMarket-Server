@@ -21,9 +21,9 @@ public class BoardRequestDto {
     @Getter
     @Setter
     public class CreateDto {
-        private TradePlaceType place;
-        private TradeMethodType method;
-        private SalesType sales;
+        private Integer place;
+        private Integer method;
+        private Integer sales;
         private String boardTitle;
         private String boardContent;
         private Integer price;
@@ -37,9 +37,9 @@ public class BoardRequestDto {
     @Setter
     public class UpdateDto {
         private Long boardId;
-        private TradePlaceType place;
-        private TradeMethodType method;
-        private SalesType sales;
+        private Integer place;
+        private Integer method;
+        private Integer sales;
         private String boardTitle;
         private String boardContent;
         private Integer price;

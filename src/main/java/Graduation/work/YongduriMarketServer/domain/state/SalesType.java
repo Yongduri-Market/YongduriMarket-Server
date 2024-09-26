@@ -1,7 +1,6 @@
 package Graduation.work.YongduriMarketServer.domain.state;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum SalesType {
@@ -22,7 +21,7 @@ public enum SalesType {
         return value;
     }
 
-    public static SalesType fromInt(int value) {
+    public static SalesType fromInt(Integer value) {
         for (SalesType sales : SalesType.values()) {
             if (sales.getValue() == value) {
                 return sales;

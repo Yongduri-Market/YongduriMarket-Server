@@ -1,7 +1,6 @@
 package Graduation.work.YongduriMarketServer.controller;
 
 import Graduation.work.YongduriMarketServer.config.CustomUserDetails;
-import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchResponseDto;
 import Graduation.work.YongduriMarketServer.service.SearchService;

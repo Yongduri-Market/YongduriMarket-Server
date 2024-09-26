@@ -11,22 +11,22 @@ public class ReportRequestDto {
     @Getter
     @Setter
     public class UserReportDto {
-        private String reportContents;
+        private String contents;
         private Long toUserId;
         private Long roomId;
-        private Integer userReportReason;
+        private Integer reason;
     }
     @Getter
     @Setter
     public class BugReportDto {
-        private String reportContents;
+        private String contents;
     }
 
     @Getter
     @Setter
-    public class AnswerDTO {
+    public static class  AnswerDTO {
         private Long reportId;
-        private String  reportAnswer;
+        private String  answer;
 
     }
 

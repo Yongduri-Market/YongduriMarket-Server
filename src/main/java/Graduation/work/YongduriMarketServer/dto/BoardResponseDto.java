@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class BoardResponseDto {
     private Long boardId;
-    private Long studentId;
+    private Long userId;
     private TradePlaceType place;
     private TradeMethodType method;
     private TradeStatus status;
@@ -23,16 +23,17 @@ public class BoardResponseDto {
     private String boardTitle;
     private String boardContent;
     private Integer price;
-
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
 
 
     public static BoardResponseDto getBoardDto(Board board){
         return new BoardResponseDto(
 
                 board.getBoardId(),
-                board.getUser().getStudentId(),
+                board.getUserId().getStudentId(),
                 board.getPlace(),
                 board.getMethod(),
                 board.getStatus(),
@@ -40,8 +41,11 @@ public class BoardResponseDto {
                 board.getBoardTitle(),
                 board.getBoardContent(),
                 board.getPrice(),
+                board.getLikeCount(),
                 board.getCreatedAt(),
                 board.getUpdatedAt()
         );
     }
+
+
 }

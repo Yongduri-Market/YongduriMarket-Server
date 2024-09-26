@@ -1,9 +1,7 @@
 package Graduation.work.YongduriMarketServer.service;
 
-import Graduation.work.YongduriMarketServer.domain.ChatRoom;
 import Graduation.work.YongduriMarketServer.domain.Search;
 import Graduation.work.YongduriMarketServer.domain.User;
-import Graduation.work.YongduriMarketServer.dto.ChatRoomRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchRequestDto;
 import Graduation.work.YongduriMarketServer.dto.SearchResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
@@ -14,8 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,23 +27,21 @@ public class SearchService {
     //전체조회
     public List <SearchResponseDto>getAllKeyword() throws Exception{
         List<Search> search = searchRepository.findByOrderByCreatedAtDesc();
-        List <SearchResponseDto> getAllListDto = new ArrayList<>();
-        search.forEach(s->getAllListDto.add(SearchResponseDto.getSearchDto(s)));
-        return getAllListDto;
+        return search.stream()
+                .map(SearchResponseDto::getSearchDto)
+                .collect(Collectors.toList());
     }
     //관련 키워드 조회
     public List<SearchResponseDto> getKeyword(Long studentId, SearchRequestDto.CheckDto request) {
         User user = findByStudentId(studentId);
-
         //400 데이터 미입력
         if(request.getKeyword().isEmpty()){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         List<Search> searchKeyword = findByKeywordContaining(request.getKeyword());
-        List <SearchResponseDto>  getList = new ArrayList<>();
-        searchKeyword.forEach(s-> getList.add(SearchResponseDto.getSearchDto(s)));
-        return getList;
-
+        return searchKeyword.stream()
+                .map(SearchResponseDto::getSearchDto)
+                .collect(Collectors.toList());
     }
 
 
@@ -57,16 +53,17 @@ public class SearchService {
         if(request.getKeyword().isEmpty()){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        try{
+        try {
             Search search = Search.builder()
+                    .userId(user)
                     .keyword(request.getKeyword())
                     .build();
             searchRepository.save(search);
             return true;
-        }catch (Exception e){
-            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-
     }
 
 

@@ -16,7 +16,7 @@ public enum TradeMethodType {
         this.state = state;
     }
 
-    public static TradeMethodType fromInt(int value) {
+    public static TradeMethodType fromInt(Integer value) {
         for (TradeMethodType method : TradeMethodType.values()) {
             if (method.getState() == value) {
                 return method;

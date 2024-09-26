@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket with File Upload</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webstomp-client/dist/webstomp.min.js"></script>
+    <script>
+        var stompClient = null;
+
+        function connect() {
+            var socket = new SockJS('/ws');
+            stompClient = webstomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+
+                stompClient.subscribe('/queue/messages', function (message) {
+                    console.log("Message received: ", message.body);
+                });
+            }, function (error) {
+                console.log("STOMP error: ", error);
+            });
+        }
+
+        // 파일 전송하는 함수
+        async function uploadFile() {
+            var formData = new FormData();
+            var fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+
+                try {
+                    const response = await fetch('/file/uploadFile', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const fileInfo = await response.json();
+                        sendMessage(fileInfo);
+                    } else {
+                        console.error('File upload failed');
+                    }
+                } catch (error) {
+                    console.error('Error uploading file: ', error);
+                }
+            } else {
+                sendMessage(null);
+            }
+        }
+
+        // WebSocket 메시지 전송
+        function sendMessage(fileInfo) {
+            var messageInput = document.getElementById('messageInput').value;
+
+            var messageData = {
+                senderId: '202178049',
+                message: messageInput,
+                recipientId: '202178049',
+                file: fileInfo // 파일 정보 전송
+            };
+
+            if (stompClient && stompClient.connected) {
+                stompClient.send("/app/send/1", JSON.stringify(messageData));
+                console.log("Message sent: ", messageData);
+            }
+        }
+
+        window.onload = function() {
+            connect();
+        };
+    </script>
+</head>
+<body>
+<h1>WebSocket Test with File Upload</h1>
+
+<label for="messageInput">Message:</label>
+<input type="text" id="messageInput" placeholder="Enter your message" />
+
+<label for="fileInput">Upload File:</label>
+<input type="file" id="fileInput" />
+
+<button onclick="uploadFile()">Send Message with File</button>
+
+</body>
+</html>

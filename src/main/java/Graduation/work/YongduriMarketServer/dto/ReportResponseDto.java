@@ -13,26 +13,28 @@ public class ReportResponseDto {
     private Long reportId;
     private Long userId;
     private Long toUserId;
-    private String reportContents;
-    private String reportAnswer;
+    private String contents;
+    private String answer;
     private ReportStatus reportStatus;
+    private Integer reason;
     private ReportType reportType;
-    private Long reportTypeId;
-    private Integer userReportReason;
+    private Long roomId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static ReportResponseDto getReportDto(Report report) {
         return new ReportResponseDto(
                 report.getReportId(),
                 report.getUserId().getStudentId(),
                 report.getToUserId().getStudentId(),
-                report.getReportContents(),
-                report.getReportAnswer(),
+                report.getContents(),
+                report.getAnswer(),
                 report.getReportStatus(),
+                report.getReason(),
                 report.getReportType(),
-                report.getReportTypeId(),
-                report.getUserReportReason(),
-                report.getCreatedAt()
+                report.getRoomId(),
+                report.getCreatedAt(),
+                report.getUpdatedAt()
         );
     }
 

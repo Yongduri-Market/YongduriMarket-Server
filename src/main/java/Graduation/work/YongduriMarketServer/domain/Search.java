@@ -1,9 +1,7 @@
 package Graduation.work.YongduriMarketServer.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,8 +17,13 @@ public class Search {
 
 
     @Id
-    @Column(nullable = false, unique = true, length = 255)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long searchId;
+
+    @JoinColumn
+    @ManyToOne
+    private User userId;
 
     @Column
     private String keyword;

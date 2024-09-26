@@ -66,9 +66,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 // 회원가입, 로그인은 모두 승인
-                                .requestMatchers( "/main", "/login", "/join", "/nickname/check", "/join/email","/password/email",
-                                        "/report","/refresh", "/changepwd/mail", "/changepwd", "/token", "/board", "/board/like", "/board/unlike").permitAll()
-                                .requestMatchers("/admin/repot/", "admin/repot/answer").hasRole("ADMIN")
+                                .requestMatchers( "/login", "/join", "/nickname/check", "/join/email","/password/email","/password/change",
+                                      "/user","/user/likeList",
+                                        "/report", "/report/detail", "/report/bug", "/report/user",
+                                        "/accessToken/reissue","/token",
+                                        "/review",
+                                        "/board", "/board/detail","/board/like", "/board/unlike",
+                                        "/search", "/search/keyword",
+                                        "/ws/**", "/file/**", "/chat/**").permitAll()
+                                .requestMatchers("/admin/report","/admin/report/detail","/admin/report/answer").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 // JWT 인증 필터 적용

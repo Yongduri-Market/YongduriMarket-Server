@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByOrderByCreatedAtDesc();
     Optional<Board> findByBoardId(Long boardId);
-    Optional<Board> findByBoardAndUser(Board board, User user);
+
 }

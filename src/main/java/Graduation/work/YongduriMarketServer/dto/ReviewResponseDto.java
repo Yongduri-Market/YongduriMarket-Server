@@ -7,15 +7,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewResponseDto {
     private Long reviewId;
 
     private Long boardId;
-
-    private Long roomId;
 
     private Long revieweeId;
 
@@ -35,7 +33,7 @@ public class ReviewResponseDto {
         return new ReviewResponseDto(
                 review.getReviewId(),
                 review.getBoard().getBoardId(),
-                review.getChatRoom().getRoomId(),
+
                 review.getReviewee().getStudentId(),
                 review.getReviewer().getStudentId(),
                 review.getAssessment(),
