@@ -29,11 +29,13 @@ public class Board {
     @ManyToOne
     private User userId;
 
-
+/*
     //거래 장소
     //인성관(0) 문예대(1) 체과대(2) 종합체육관(4) 도서관(5) 에융대(6) 보1(7) 보2(8) 무도대(9) 대운동장(10)
     @Column
     private TradePlaceType place;
+
+    */
 
     //거래 방식
     //판매하기(0) 나눔하기(1) 구해요(2)
@@ -46,15 +48,15 @@ public class Board {
     private TradeStatus status;
 
     //판매 카테고리
-    //책(0), 의류(1), 전자기기(2), 부동산(3), 기타(4);
+    //책(0), 의류(1), 전자기기(2), 부동산(3), 기타(4)
     @Column
     private SalesType sales;
 
     @Column
-    private String boardTitle;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String boardContent;
+    private String content;
 
 
     @Column(nullable = false)

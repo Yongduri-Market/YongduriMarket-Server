@@ -13,19 +13,18 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class DetailDto {
+    public static class DetailDto {
         private Long boardId;
     }
 
 
     @Getter
     @Setter
-    public class CreateDto {
-        private Integer place;
+    public static class CreateDto {
         private Integer method;
         private Integer sales;
-        private String boardTitle;
-        private String boardContent;
+        private String title;
+        private String content;
         private Integer price;
 
 
@@ -35,13 +34,12 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class UpdateDto {
+    public  static class UpdateDto {
         private Long boardId;
-        private Integer place;
         private Integer method;
         private Integer sales;
-        private String boardTitle;
-        private String boardContent;
+        private String title;
+        private String content;
         private Integer price;
     }
 
@@ -49,7 +47,7 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class DeleteDto {
+    public static class DeleteDto {
         private Long boardId;
     }
 
@@ -57,14 +55,14 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class LikeDto {
+    public static class LikeDto {
         private Long boardId;
 
 
     }
     @Getter
     @Setter
-    public class UnLikeDto {
+    public static class UnLikeDto {
         private Long boardId;
     }
 
@@ -72,13 +70,13 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class ReserveTradeDto {
+    public static class ReserveTradeDto {
         private Long boardId;
 
     }
     @Getter
     @Setter
-    public class EndTradeDto {
+    public static class EndTradeDto {
         private Long boardId;
     }
 

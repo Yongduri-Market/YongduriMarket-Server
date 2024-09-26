@@ -45,7 +45,6 @@ public class BoardService {
     public BoardResponseDto getBoardDetail(Long boardId) throws Exception {
         Board board = boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_ID));
-
         try {
             return BoardResponseDto.getBoardDto(board);
         } catch (Exception e) {
@@ -54,28 +53,23 @@ public class BoardService {
         }
     }
 
-
-
-
     // 게시글 작성
     public Boolean createBoard(Long studentId, BoardRequestDto.CreateDto request) throws Exception{
         User user = findByStudentId(studentId);
-
-
-        if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
-        request.getPrice() == null || request.getSales() == null || request.getPlace() == null
+        //400 데이터 미입력
+        if(request.getTitle().isEmpty() || request.getContent().isEmpty() ||
+        request.getPrice() == null || request.getSales() == null
                 || request.getMethod() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         try{
             Board board = Board.builder()
                     .userId(user)
-                    .place(TradePlaceType.fromInt(request.getPlace()))
                     .method(TradeMethodType.fromInt(request.getMethod()))
                     .status(TradeStatus.판매중)
                     .sales(SalesType.fromInt(request.getSales()))
-                    .boardTitle(request.getBoardTitle())
-                    .boardContent(request.getBoardContent())
+                    .title(request.getTitle())
+                    .content(request.getContent())
                     .price(request.getPrice())
                     .build();
             boardRepository.save(board);
@@ -89,29 +83,27 @@ public class BoardService {
     public Boolean updateBoard(Long studentId, BoardRequestDto.UpdateDto request) throws Exception{
         User user = findByStudentId(studentId);
         Board board= findByBoardId(request.getBoardId());
-
-
-
+        //400 데이터 미입력
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
-        if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
-                request.getPrice() == null || request.getSales() == null || request.getPlace() == null
+        if(request.getTitle().isEmpty() || request.getContent().isEmpty() ||
+                request.getPrice() == null || request.getSales() == null
                 || request.getMethod() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
 
         //자기가 쓴 글이 아닐 때
+        //403 권한 없음
         if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
 
         }
         try{
-            board.setBoardTitle(request.getBoardTitle());
-            board.setBoardContent(request.getBoardContent());
+            board.setTitle(request.getTitle());
+            board.setContent(request.getContent());
             board.setPrice(request.getPrice());
             board.setSales(SalesType.fromInt(request.getSales()));
-            board.setPlace(TradePlaceType.fromInt(request.getPlace()));
             board.setMethod(TradeMethodType.fromInt(request.getMethod()));
             boardRepository.save(board);
             return true;
@@ -123,10 +115,12 @@ public class BoardService {
     //게시글 삭제
     public Boolean deleteBoard(Long studentId, BoardRequestDto.DeleteDto request)throws Exception{
         User user = findByStudentId(studentId);
+        //400 데이터 미입력
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
         Board board= findByBoardId(request.getBoardId());
+        //403 권한 없음
         if(!board.getUserId().getStudentId().equals(studentId)){
             throw new CustomException(ErrorCode.NO_AUTH);
         }
@@ -149,6 +143,7 @@ public class BoardService {
         if(request.getBoardId() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+        //409 데이터 중복
         if (existingLike.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE);
         }
@@ -195,10 +190,6 @@ public class BoardService {
         }
 
     }
-
-
-
-
 
     //거래 완료
     public Boolean endTrade(Long studentId, BoardRequestDto.EndTradeDto request) {
@@ -253,10 +244,4 @@ public class BoardService {
         return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
     }
-
-
-
-
-
-
 }

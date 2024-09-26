@@ -29,8 +29,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 유저가 좋아요를 누른 게시글 목록 조회
-    public List<BoardResponseDto> getLikedBoards(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<BoardResponseDto> getLikedBoards(Long studentId) {
+        User user = userRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<BoardLike> boardLikes = boardLikeRepository.findByUser(user);
         List<Board> likedBoards = boardLikes.stream()

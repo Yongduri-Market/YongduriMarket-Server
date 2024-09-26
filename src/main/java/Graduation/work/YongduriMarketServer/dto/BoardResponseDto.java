@@ -16,12 +16,11 @@ import java.time.LocalDateTime;
 public class BoardResponseDto {
     private Long boardId;
     private Long userId;
-    private TradePlaceType place;
     private TradeMethodType method;
     private TradeStatus status;
     private SalesType sales;
-    private String boardTitle;
-    private String boardContent;
+    private String title;
+    private String content;
     private Integer price;
     private Integer likeCount;
     private LocalDateTime createdAt;
@@ -34,12 +33,11 @@ public class BoardResponseDto {
 
                 board.getBoardId(),
                 board.getUserId().getStudentId(),
-                board.getPlace(),
                 board.getMethod(),
                 board.getStatus(),
                 board.getSales(),
-                board.getBoardTitle(),
-                board.getBoardContent(),
+                board.getTitle(),
+                board.getContent(),
                 board.getPrice(),
                 board.getLikeCount(),
                 board.getCreatedAt(),

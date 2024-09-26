@@ -6,7 +6,7 @@ import lombok.Setter;
 public class SearchRequestDto {
     @Getter
     @Setter
-    public class RegisterDto{
+    public static class RegisterDto{
         private String keyword;
 
     }
@@ -19,7 +19,7 @@ public class SearchRequestDto {
 
     @Getter
     @Setter
-    public class CheckDto {
+    public static class CheckDto {
         private String keyword;
     }
 }
