@@ -72,7 +72,9 @@ public class SecurityConfig {
                                         "/accessToken/reissue","/token",
                                         "/review",
                                         "/board", "/board/detail","/board/like", "/board/unlike",
-                                        "/search", "/search/keyword").permitAll()
+                                        "/search", "/search/keyword",
+                                        "/ws/**", "/file/**", "/chat/**").permitAll()
+                                .requestMatchers("/", "/index.html", "/*.css", "/*.js", "/favicon.ico").permitAll()
                                 .requestMatchers("/admin/report/", "/admin/report/detail", "/admin/report/answer").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

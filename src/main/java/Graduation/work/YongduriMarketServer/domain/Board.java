@@ -4,14 +4,17 @@ import Graduation.work.YongduriMarketServer.domain.state.SalesType;
 import Graduation.work.YongduriMarketServer.domain.state.TradeMethodType;
 import Graduation.work.YongduriMarketServer.domain.state.TradePlaceType;
 import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -65,6 +68,9 @@ public class Board {
     @Column
     @Builder.Default
     private Integer likeCount = 0;
+
+    @Column
+    private String fileInfoId;
 
 
     @CreationTimestamp

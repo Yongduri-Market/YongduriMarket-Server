@@ -8,9 +8,11 @@ import Graduation.work.YongduriMarketServer.service.BoardService;
 import Graduation.work.YongduriMarketServer.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,9 +23,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-
-
     // 내 정보 조회
     @GetMapping
     public ResponseEntity<UserResponseDto>getInfoList(@AuthenticationPrincipal CustomUserDetails user)throws Exception {
@@ -31,9 +30,9 @@ public class UserController {
     }
 
     // 내 정보 수정
-    @PutMapping
-    public ResponseEntity<Boolean>infoUpdate(@AuthenticationPrincipal CustomUserDetails user,UserResponseDto request)throws Exception {
-        return new ResponseEntity<Boolean>(userService.infoUpdate(user.getStudentId(), request), HttpStatus.OK);
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Boolean>infoUpdate(@AuthenticationPrincipal CustomUserDetails user, @RequestPart("user") UserResponseDto request, @RequestPart("file") MultipartFile file)throws Exception {
+        return new ResponseEntity<Boolean>(userService.infoUpdate(user.getStudentId(), request, file), HttpStatus.OK);
     }
     // 좋아요 목록 조회
     @GetMapping("/likeList")

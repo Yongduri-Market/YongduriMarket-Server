@@ -5,8 +5,10 @@ import Graduation.work.YongduriMarketServer.domain.state.TradeMethodType;
 import Graduation.work.YongduriMarketServer.domain.state.TradePlaceType;
 import Graduation.work.YongduriMarketServer.domain.state.TradeStatus;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class BoardRequestDto {
@@ -20,7 +22,7 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class CreateDto {
+    public static class CreateDto {
         private Integer place;
         private Integer method;
         private Integer sales;
@@ -28,14 +30,12 @@ public class BoardRequestDto {
         private String boardContent;
         private Integer price;
 
-
-
     }
 
 
     @Getter
     @Setter
-    public class UpdateDto {
+    public static class UpdateDto {
         private Long boardId;
         private Integer place;
         private Integer method;
@@ -49,7 +49,7 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class DeleteDto {
+    public static class DeleteDto {
         private Long boardId;
     }
 
@@ -57,14 +57,14 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class LikeDto {
+    public static class LikeDto {
         private Long boardId;
 
 
     }
     @Getter
     @Setter
-    public class UnLikeDto {
+    public static class UnLikeDto {
         private Long boardId;
     }
 
@@ -72,13 +72,13 @@ public class BoardRequestDto {
 
     @Getter
     @Setter
-    public class ReserveTradeDto {
+    public static class ReserveTradeDto {
         private Long boardId;
 
     }
     @Getter
     @Setter
-    public class EndTradeDto {
+    public static class EndTradeDto {
         private Long boardId;
     }
 

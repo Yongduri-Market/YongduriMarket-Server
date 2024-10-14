@@ -1,5 +1,6 @@
 package Graduation.work.YongduriMarketServer.domain;
 
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,13 +55,18 @@ public class User {
     @Column
     private LocalDateTime updatedAt;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "file_info_id")
+    private FileInfo fileInfo;
 
-    public User(Long studentId,String password, String name, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt  ){
+
+    public User(Long studentId,String password, String name, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt, FileInfo fileInfo  ) {
 
         this.studentId = studentId;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
+        this.fileInfo = fileInfo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -76,6 +82,4 @@ public class User {
         this.refreshToken = newRefreshToken;
         return this;
     }
-
-
 }

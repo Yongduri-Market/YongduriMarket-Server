@@ -12,6 +12,9 @@ import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 //import Graduation.work.YongduriMarketServer.dto.BoardResponseSavedIdDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
+import Graduation.work.YongduriMarketServer.file.service.FileService;
+import Graduation.work.YongduriMarketServer.file.service.ImageType;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
 import Graduation.work.YongduriMarketServer.repository.BoardLikeRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
@@ -19,10 +22,13 @@ import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +37,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final BoardLikeRepository likeRepository;
+    private final FileService fileService;
 
 
     //게시글 전체 조회
@@ -58,9 +65,19 @@ public class BoardService {
 
 
     // 게시글 작성
-    public Boolean createBoard(Long studentId, BoardRequestDto.CreateDto request) throws Exception{
+    @Transactional
+    public Boolean createBoard(Long studentId, BoardRequestDto.CreateDto request, List<MultipartFile> files) throws Exception{
         User user = findByStudentId(studentId);
+        String fileInfoIds = null;
 
+        List<FileInfo> fileInfos = Collections.emptyList();
+        if(files != null) {
+            fileInfos = fileService.saveFile(files, ImageType.BOARD);
+
+            fileInfoIds = fileInfos.stream()
+                    .map(fileInfo -> String.valueOf(fileInfo.getId()))
+                    .collect(Collectors.joining(","));
+        }
 
         if(request.getBoardTitle().isEmpty() || request.getBoardContent().isEmpty() ||
         request.getPrice() == null || request.getSales() == null || request.getPlace() == null
@@ -72,11 +89,12 @@ public class BoardService {
                     .userId(user)
                     .place(TradePlaceType.fromInt(request.getPlace()))
                     .method(TradeMethodType.fromInt(request.getMethod()))
-                    .status(TradeStatus.판매중)
+                    .status(TradeStatus.거래중)
                     .sales(SalesType.fromInt(request.getSales()))
                     .boardTitle(request.getBoardTitle())
                     .boardContent(request.getBoardContent())
                     .price(request.getPrice())
+                    .fileInfoId(fileInfoIds)
                     .build();
             boardRepository.save(board);
             return true;

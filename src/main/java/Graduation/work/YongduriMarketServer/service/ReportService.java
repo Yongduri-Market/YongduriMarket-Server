@@ -5,6 +5,9 @@ import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
 import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.dto.ReportRequestDto;
 import Graduation.work.YongduriMarketServer.dto.ReportResponseDto;
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
+import Graduation.work.YongduriMarketServer.file.service.FileService;
+import Graduation.work.YongduriMarketServer.file.service.ImageType;
 import Graduation.work.YongduriMarketServer.repository.ReportRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
@@ -12,14 +15,20 @@ import Graduation.work.YongduriMarketServer.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
 
     public List<ReportResponseDto> getAllReport() throws Exception {
@@ -38,10 +47,9 @@ public class ReportService {
     }
 
     //신고하기 사용자 상세조회
-    public ReportResponseDto getUserDetail(ReportRequestDto.DetailDto request)  throws Exception{
-        Report report  = findByReportId(request.getReportId());
+    public ReportResponseDto getUserDetail(Long reportId)  throws Exception{
+        Report report  = findByReportId(reportId);
         try{
-            System.out.println(request.getReportId());
             return ReportResponseDto.getReportDto(report);
 
         }catch (Exception e){
@@ -59,8 +67,8 @@ public class ReportService {
         return getListDto;
     }
     //신고하기 관리자 상세조회
-    public ReportResponseDto getAdminDetail(ReportRequestDto.DetailDto request)  throws Exception{
-        Report report  = findByReportId(request.getReportId());
+    public ReportResponseDto getAdminDetail(Long reportId)  throws Exception{
+        Report report  = findByReportId(reportId);
         try{
             return ReportResponseDto.getReportDto(report);
         }catch (Exception e){
@@ -70,16 +78,22 @@ public class ReportService {
     }
 
     // 유저 신고
-    public Boolean reportUser(Long studentId, ReportRequestDto.UserReportDto request) {
+    public Boolean reportUser(Long studentId, ReportRequestDto.UserReportDto request, MultipartFile file) {
         User user = findByStudentId(studentId);
         User toUserId = findByStudentId(request.getToUserId());
-
 
         // 400 -데이터 미입력
         if(request.getReportContents().isEmpty() || request.getToUserId() == null
         || request.getUserReportReason() == null){
             throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
         }
+
+        List<FileInfo> fileInfos = null;
+
+        if(file != null) {
+            fileInfos = fileService.saveFile(List.of(file), ImageType.REPORT);
+        }
+
         try{
 
             Report report = Report.builder()
@@ -88,6 +102,7 @@ public class ReportService {
                     .toUserId(toUserId)
                     .reportType(ReportType.유저신고)
                     .reportStatus(ReportStatus.대기중)
+                    .fileInfo(fileInfos.get(0))
                     .build();
             reportRepository.save(report);
             return true;
@@ -108,6 +123,7 @@ public class ReportService {
 
             Report report = Report.builder()
                     .userId(user)
+                    .toUserId(user)
                     .reportContents(request.getReportContents())
                     .reportType(ReportType.앱버그신고)
                     .reportStatus(ReportStatus.대기중)

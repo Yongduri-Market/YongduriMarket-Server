@@ -7,12 +7,15 @@ import Graduation.work.YongduriMarketServer.dto.BoardResponseDto;
 import Graduation.work.YongduriMarketServer.dto.UserResponseDto;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
+import Graduation.work.YongduriMarketServer.file.service.FileService;
+import Graduation.work.YongduriMarketServer.file.service.ImageType;
 import Graduation.work.YongduriMarketServer.repository.BoardLikeRepository;
 import Graduation.work.YongduriMarketServer.repository.BoardRepository;
 import Graduation.work.YongduriMarketServer.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class UserService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     // 유저가 좋아요를 누른 게시글 목록 조회
     public List<BoardResponseDto> getLikedBoards(Long userId) {
@@ -64,14 +68,12 @@ public class UserService {
 
 
     // 내 정보 수정
-    public Boolean infoUpdate(Long studentId, UserResponseDto request)throws Exception {
+    public Boolean infoUpdate(Long studentId, UserResponseDto request, MultipartFile file)throws Exception {
         //404 studentId 없음
         User user = findByStudentId(studentId);
 
-        //400 데이터 미입력
-        if(request.getNickname() == null){
-            throw new CustomException(ErrorCode.INSUFFICIENT_DATA);
-        }
+        // 파일 수정
+        user.setFileInfo(fileService.update(user.getFileInfo().getId(), file, ImageType.USER));
 
         try{
             user.setNickname(request.getNickname());
@@ -83,7 +85,7 @@ public class UserService {
     }
 
 
-    private User findByStudentId(Long studentId) {
+    public User findByStudentId(Long studentId) {
         return userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
 

@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum TradeStatus {
-    판매중(0), // 판매중
+    거래중(0), // 판매중
     거래예약(1), // 거래예약
-    거래완료(2); // 거래완료
+    거래완료(2), // 거래완료
+    예약중(3); // 예약중
 
     private final int state;
 

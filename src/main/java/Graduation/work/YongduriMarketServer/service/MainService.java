@@ -4,6 +4,9 @@ import Graduation.work.YongduriMarketServer.domain.*;
 import Graduation.work.YongduriMarketServer.dto.*;
 import Graduation.work.YongduriMarketServer.exception.CustomException;
 import Graduation.work.YongduriMarketServer.exception.ErrorCode;
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
+import Graduation.work.YongduriMarketServer.file.service.FileService;
+import Graduation.work.YongduriMarketServer.file.service.ImageType;
 import Graduation.work.YongduriMarketServer.repository.*;
 import Graduation.work.YongduriMarketServer.security.TokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -30,13 +35,14 @@ public class MainService {
     private final TokenProvider tokenProvider;
     private final JavaMailSender javaMailSender;;
     private final BoardService boardService;
+    private final FileService fileService;
 //
 
     private String authNum;
     private long exp_refreshToken = Duration.ofDays(14).toMillis();
 
     //회원가입
-    public Boolean join(JoinDto request) throws Exception {
+    public Boolean join(JoinDto request, MultipartFile file) throws Exception {
         //400 - 데이터 미입력
         if(request.getStudentId() == null || request.getPassword() == null || request.getName() == null ||request.getNickname() ==null
         || request.getBirthDate() ==null || request.getPhone() == null){
@@ -50,6 +56,13 @@ public class MainService {
         if(userRepository.findByNickname(request.getNickname()).isPresent()){
             throw new CustomException(ErrorCode.DUPLICATE);
         }
+
+        List<FileInfo> fileInfos = null;
+
+        if(file != null) {
+            fileInfos = fileService.saveFile(List.of(file), ImageType.USER);
+        }
+
         try{
             User user = User.builder()
                     .studentId(request.getStudentId())
@@ -58,6 +71,7 @@ public class MainService {
                     .nickname(request.getNickname())
                     .phone(request.getPhone())
                     .birthDate(request.getBirthDate())
+                    .fileInfo(fileInfos != null ? fileInfos.get(0) : null)
                     .build();
             userRepository.save(user);
         } catch (Exception e) {

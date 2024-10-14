@@ -1,6 +1,7 @@
 package Graduation.work.YongduriMarketServer.domain;
 import Graduation.work.YongduriMarketServer.domain.state.ReportType;
 import Graduation.work.YongduriMarketServer.domain.state.ReportStatus;
+import Graduation.work.YongduriMarketServer.file.entity.FileInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,12 +21,12 @@ public class Report {
 
     // 신고하는 사람
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id", nullable = true)
     private User userId;
 
     // 신고 당하는 사람
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "to_user_id", nullable = true)  // nullable 설정
     private User toUserId;
 
     @Column(columnDefinition = "TEXT")
@@ -47,6 +48,10 @@ public class Report {
 
     @Column
     private Long roomId;
+
+    @OneToOne
+    @JoinColumn(name = "file_info_id")
+    private FileInfo fileInfo;
 
     @CreationTimestamp
     @Column

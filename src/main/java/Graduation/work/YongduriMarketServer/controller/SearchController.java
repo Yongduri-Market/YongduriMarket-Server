@@ -26,14 +26,14 @@ public class SearchController {
 
     //관련 키워드 조회
     @GetMapping(value = "/keyword")
-    public ResponseEntity<List<SearchResponseDto>> getKeyword(@AuthenticationPrincipal CustomUserDetails user,SearchRequestDto.CheckDto request) throws Exception{
+    public ResponseEntity<List<SearchResponseDto>> getKeyword(@AuthenticationPrincipal CustomUserDetails user,@RequestBody  SearchRequestDto.CheckDto request) throws Exception{
         return new ResponseEntity<List<SearchResponseDto>>(searchService.getKeyword(user.getStudentId(),request), HttpStatus.OK);
     }
 
 
     //검색어 등록
     @PostMapping
-    public ResponseEntity<Boolean> registerKeyword(@AuthenticationPrincipal CustomUserDetails user, SearchRequestDto.RegisterDto request) throws Exception{
+    public ResponseEntity<Boolean> registerKeyword(@AuthenticationPrincipal CustomUserDetails user, @RequestBody  SearchRequestDto.RegisterDto request) throws Exception{
         return new ResponseEntity<Boolean>(searchService.registerKeyword(user.getStudentId(),request), HttpStatus.OK);
     }
 
@@ -41,7 +41,7 @@ public class SearchController {
 
     //검색어 삭제
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteKeyword(@AuthenticationPrincipal CustomUserDetails user, SearchRequestDto.DeleteDto request) throws Exception{
+    public ResponseEntity<Boolean> deleteKeyword(@AuthenticationPrincipal CustomUserDetails user, @RequestBody SearchRequestDto.DeleteDto request) throws Exception{
         return new ResponseEntity<Boolean>(searchService.deleteKeyword(user.getStudentId(),request), HttpStatus.OK);
     }
 
